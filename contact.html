@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | Paws &amp; Whiskers Pet Care</title>
+  <meta name="description" content="Get in touch with Paws &amp; Whiskers Pet Care &amp; Grooming Centre in Bangsar Baru, Kuala Lumpur. Interactive map, boutique hours, and official veterinary guidelines." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="promo-bar">
+    <div class="container promo-bar-inner">
+      <span id="timeGreeting" class="greeting-badge">☀️ Welcome, Pet Parent!</span>
+      <div class="tip-rotator">
+        <span id="rotatingTip">📍 Visit our Bangsar Baru flagship boutique—dedicated pet drop-off parking right out front!</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" aria-label="Paws and Whiskers Home">
+        <img src="assets/images/paws-whiskers-logo.png" alt="Paws &amp; Whiskers Logo" class="brand-logo-img">
+        <div>
+          Paws &amp; Whiskers
+          <span class="brand-subtitle">Pet Care &amp; Grooming Centre</span>
+        </div>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="service.html">Our Services</a></li>
+        <li><a href="packages.html">Packages &amp; Calculator</a></li>
+        <li><a href="groomers.html">Meet Our Groomers</a></li>
+        <li><a href="contact.html" class="active">Contact Us</a></li>
+        <li><a href="booking.html" class="btn-nav">Book Appointment</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="text-drop-shadow">Contact Us &amp; <span class="text-glow-neon" style="color:var(--accent-light);">Boutique Location</span></h1>
+      <p>Have questions about sensitive skin, anxious cats, or custom breed scissoring? Reach out to our concierge team.</p>
+    </div>
+  </section>
+
+  <main class="section">
+    <div class="container">
+      <div class="calculator-layout">
+        <!-- Requirement 6.1: Contact Form for Support -->
+        <div class="calc-panel">
+          <h2 style="color: var(--primary-dark); margin-bottom: 1rem;">💬 Send a Support Inquiry</h2>
+          <form id="contactSupportForm">
+            <div class="form-group">
+              <label for="supportName">Your Name *</label>
+              <input type="text" id="supportName" class="form-control" placeholder="Enter your full name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="supportEmail">Email Address *</label>
+              <input type="email" id="supportEmail" class="form-control" placeholder="you@example.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="supportTopic">Inquiry Topic</label>
+              <select id="supportTopic" class="form-control">
+                <option>General Grooming &amp; Spa Question</option>
+                <option>Anxious Cat / Rabbit Special Handling</option>
+                <option>Dermatology / Veterinary Consultation</option>
+                <option>Feedback or Partnership</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="supportMessage">How Can We Help You &amp; Your Pet? *</label>
+              <textarea id="supportMessage" rows="4" class="form-control" placeholder="Tell us about your pet's breed, age, and needs..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Message to Concierge</button>
+          </form>
+
+          <div
+            id="contactFeedback"
+            style="display:none; margin-top:1.25rem; padding:1rem; border-radius:10px; background:#ecfdf5; color:#065f46; border:1px solid #10b981;"
+          ></div>
+        </div>
+
+        <!-- Requirement 6.2 & 6.4: Store Info + Valid External Hyperlinks to Pet Association Guidelines -->
+        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+          <div class="calc-panel">
+            <h3 style="color: var(--primary-dark); margin-bottom: 0.75rem;">🏬 Boutique Store Information</h3>
+            <p style="margin-bottom: 0.5rem;"><strong>📍 Address:</strong> No. 28, Jalan Telawi 3, Bangsar Baru, 59100 Kuala Lumpur, Malaysia</p>
+            <p style="margin-bottom: 0.5rem;"><strong>📞 Phone:</strong> <a href="tel:+60322849910" style="color:var(--primary); font-weight:600;">+60 3-2284 9910</a> / WhatsApp: +60 12-889 4410</p>
+            <p style="margin-bottom: 0.5rem;"><strong>✉️ Email:</strong> <a href="mailto:concierge@pawsandwhiskers.my" style="color:var(--primary); font-weight:600;">concierge@pawsandwhiskers.my</a></p>
+            <p><strong>🕒 Operating Hours:</strong> Tuesday – Sunday, 9:30 AM – 7:00 PM (Closed Mondays for deep UV-C sanitization)</p>
+          </div>
+
+          <div class="calc-panel" style="background: var(--surface-alt);">
+            <h3 style="color: var(--primary-dark); margin-bottom: 0.5rem;">📘 Official Pet Association Guidelines</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1rem;">
+              Our welfare protocols strictly adhere to international veterinary and professional grooming association standards:
+            </p>
+            <ul style="padding-left: 1.2rem; line-height: 1.8;">
+              <li>
+                <a href="https://wsava.org/global-guidelines/" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 700; text-decoration: underline;">
+                  World Small Animal Veterinary Association (WSAVA) Global Welfare Guidelines ↗
+                </a>
+              </li>
+              <li>
+                <a href="https://msava.org/" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 700; text-decoration: underline;">
+                  Malaysian Small Animal Veterinary Association (MSAVA) Standards ↗
+                </a>
+              </li>
+              <li>
+                <a href="https://nationaldoggroomers.com/" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 700; text-decoration: underline;">
+                  National Dog Groomers Association (NDGAA) Safety &amp; Hygiene Code ↗
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Requirement 6.3: Embedded Interactive Visual Mock Map -->
+      <div class="calc-panel" style="margin-top: 2.5rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+          <div>
+            <h3 style="color: var(--primary-dark);">🗺️ Interactive Visual Mock Map — Bangsar Baru District</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted);">Click the interactive pins below to explore parking, transit access, and our boutique entrance.</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="filter-btn map-pin-btn" data-title="Paws &amp; Whiskers Flagship Salon" data-info="No. 28 Jalan Telawi 3 — Ground Floor with step-free pet stroller ramp &amp; glass viewing spa.">📍 Salon Entrance</button>
+            <button type="button" class="filter-btn map-pin-btn" data-title="VIP Pet Drop-Off Bays" data-info="2 reserved shaded parking bays directly in front of our entrance (15-minute complimentary drop-off/pick-up).">🚗 VIP Pet Parking</button>
+            <button type="button" class="filter-btn map-pin-btn" data-title="Bangsar Village II Landmark" data-info="Located just 120 meters across the street—enjoy a coffee while your pet enjoys their royal spa!">🛍️ Nearby Landmark</button>
+          </div>
+        </div>
+
+        <div id="mapPinDetails" style="padding: 0.85rem 1.15rem; background: var(--surface-alt); border-radius: 10px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
+          <strong>📍 Paws &amp; Whiskers Flagship Salon:</strong> Click any landmark button above or pin on the map to inspect directions!
+        </div>
+
+        <div class="mock-map-box">
+          <svg viewBox="0 0 800 320" width="100%" height="300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive Mock Map of Jalan Telawi 3 Bangsar">
+            <!-- Map Background & Parks -->
+            <rect width="800" height="320" fill="#e6f2ef"/>
+            <rect x="40" y="30" width="220" height="110" rx="14" fill="#cde5d9"/>
+            <text x="70" y="90" fill="#1f5f5b" font-weight="bold" font-size="14">🌿 Telawi Green Pocket Park</text>
+
+            <!-- Roads -->
+            <rect x="0" y="160" width="800" height="46" fill="#ffffff"/>
+            <line x1="0" y1="183" x2="800" y2="183" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="12 10"/>
+            <text x="30" y="178" fill="#64748b" font-weight="bold" font-size="13">JALAN TELAWI 3 (ONE-WAY)</text>
+
+            <rect x="330" y="0" width="46" height="320" fill="#ffffff"/>
+            <text x="340" y="290" fill="#64748b" font-weight="bold" font-size="12" transform="rotate(-90 340,290)">JALAN MAAROF LINK</text>
+
+            <!-- Landmark: Bangsar Village II -->
+            <rect x="440" y="35" width="300" height="105" rx="12" fill="#f4eee6" stroke="#d4a359" stroke-width="2"/>
+            <text x="495" y="92" fill="#1e292b" font-weight="bold" font-size="15">🛍️ Bangsar Village II (120m)</text>
+
+            <!-- VIP Parking Zone -->
+            <rect x="415" y="215" width="135" height="65" rx="8" fill="#dbeafe" stroke="#0284c7" stroke-width="2"/>
+            <text x="430" y="252" fill="#0369a1" font-weight="bold" font-size="13">🚗 VIP Pet Drop-Off</text>
+
+            <!-- Main Salon Building -->
+            <rect x="570" y="215" width="190" height="85" rx="12" fill="#1f5f5b"/>
+            <text x="592" y="255" fill="#ffffff" font-weight="bold" font-size="15">🐾 Paws &amp; Whiskers</text>
+            <text x="595" y="276" fill="#f9dcc4" font-size="12">No. 28, Jalan Telawi 3</text>
+            <circle cx="665" cy="198" r="14" fill="#e07a5f" stroke="#fff" stroke-width="3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        &copy; 2026 Paws &amp; Whiskers Pet Care &amp; Grooming Centre.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

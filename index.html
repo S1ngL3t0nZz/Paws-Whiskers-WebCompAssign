@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paws &amp; Whiskers Pet Care &amp; Grooming Centre</title>
+  <meta name="description" content="Premier boutique pet spa prototype in Malaysia with dynamic service catalog, live combo price calculator, groomer portfolios, and appointment booking." />
+  <meta property="og:title" content="Paws &amp; Whiskers Pet Care &amp; Grooming Centre" />
+  <meta property="og:description" content="Premier boutique pet spa prototype in Malaysia with dynamic service catalog, live combo price calculator, groomer portfolios, and appointment booking." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- JS Requirement 7.1: Time-Aware Greeting & Dynamic Pet Care Tips Banner -->
+  <div class="promo-bar">
+    <div class="container promo-bar-inner">
+      <span id="timeGreeting" class="greeting-badge">☀️ Welcome, Pet Parent!</span>
+      <div class="tip-rotator">
+        <span id="rotatingTip">💡 Pet Care Tip: Brush your cat or dog 3x a week in humid weather to prevent painful skin hotspots!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header & Salon Logo -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" aria-label="Paws and Whiskers Home">
+        <img src="assets/images/paws-whiskers-logo.png" alt="Paws &amp; Whiskers Logo" class="brand-logo-img">
+        <div>
+          Paws &amp; Whiskers
+          <span class="brand-subtitle">Pet Care &amp; Grooming Centre</span>
+        </div>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="service.html">Our Services</a></li>
+        <li><a href="packages.html">Packages &amp; Calculator</a></li>
+        <li><a href="groomers.html">Meet Our Groomers</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="booking.html" class="btn-nav">Book Appointment</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- Requirement 1.2: Salon Hero Banner -->
+    <section class="hero-banner">
+      <div class="ambient-glow-orb" style="top:-80px; right:-50px;"></div>
+      <div class="ambient-glow-orb" style="bottom:-100px; left:-80px; width:350px; height:350px; background:radial-gradient(circle, rgba(31,95,91,0.1) 0%, transparent 70%);"></div>
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="badge badge-gold badge-floating">✨ Premier Boutique Pet Spa in Malaysia</span>
+          <h1>Where Every Paw &amp; Whisker Receives <span class="text-gradient-shimmer text-glow-neon">Royal Care</span></h1>
+          <p>
+            Experience stress-free, veterinary-guided spa treatments, breed-standard scissor styling, and pheromone-calmed feline suites in a spotless, 100% cage-free sanctuary.
+          </p>
+          <div class="hero-actions">
+            <a href="booking.html" class="btn btn-primary text-bouncy">Book a Spa Session</a>
+            <a href="packages.html" class="btn btn-outline text-bouncy">Calculate Combo Price</a>
+          </div>
+        </div>
+
+        <div class="hero-showcase">
+          <img
+            id="heroCarouselImg"
+            src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=900&q=80"
+            alt="Groomed pet at Paws and Whiskers"
+          />
+          <div class="hero-caption">
+            <span id="heroCarouselCaption">Mochi (Toy Poodle) — Fresh from our Gold Royal Aromatherapy Spa</span>
+            <button type="button" id="nextSlideBtn" class="filter-btn" style="padding:0.25rem 0.75rem;">Next ➔</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Requirement 1.3: About Our Facility -->
+    <section class="section">
+      <div class="container facility-grid">
+        <div>
+          <span class="badge badge-dog">About Our Facility</span>
+          <h2 style="font-size: 2rem; color: var(--primary-dark); margin: 0.5rem 0 1rem;">
+            Designed for High Trust, Hospital-Grade Cleanliness &amp; Pet Comfort
+          </h2>
+          <p style="color: var(--text-muted); margin-bottom: 1rem;">
+            At Paws &amp; Whiskers Pet Care &amp; Grooming Centre, we believe grooming should be rejuvenating, never stressful. Our glass-walled boutique allows pet parents full visibility while separated Dog, Cat, and Rabbit zones ensure total tranquility.
+          </p>
+          <div class="facility-features">
+            <div class="feature-box">
+              <h4>🫧 Medical-Grade Sanitization</h4>
+              <p style="font-size:0.9rem; color:var(--text-muted);">UV-C tool sterilization and ozone-filtered water between every single appointment.</p>
+            </div>
+            <div class="feature-box">
+              <h4>🐱 Soundproof Feline Suites</h4>
+              <p style="font-size:0.9rem; color:var(--text-muted);">Zero-dog-contact rooms diffused with calming Feliway pheromones.</p>
+            </div>
+            <div class="feature-box">
+              <h4>🩺 On-Site Vet Consultation</h4>
+              <p style="font-size:0.9rem; color:var(--text-muted);">Pre-groom skin, ear, and coat wellness check included with every spa package.</p>
+            </div>
+            <div class="feature-box">
+              <h4>🌿 100% Cage-Free Lounge</h4>
+              <p style="font-size:0.9rem; color:var(--text-muted);">Hand-dried by certified stylists—never locked inside heated box dryers.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img
+            src="https://images.unsplash.com/photo-1581888227599-779811939961?auto=format&fit=crop&w=900&q=80"
+            alt="Clean modern pet grooming facility"
+            style="border-radius: var(--radius); box-shadow: var(--shadow);"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Requirement 1.4: Three (3) Flagship Premium Packages -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-gold">Signature Experiences</span>
+          <h2>Our Three Flagship Premium Packages</h2>
+          <p>Dynamically curated spa treatments combining hydro-therapy, coat artistry, and holistic wellness.</p>
+        </div>
+
+        <div id="flagshipPackagesGrid" class="grid-3">
+          <!-- Populated dynamically via script.js from flagshipPackages array -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.85rem;">
+            <img src="assets/images/paws-whiskers-logo.png" alt="Paws &amp; Whiskers Logo" style="height: 48px; width: 48px; object-fit: cover; object-position: center 25%; border-radius: 50%; border: 2px solid var(--accent-light); box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            <div>
+              <h4 style="margin: 0; color: #fff; font-size: 1.15rem;">Paws &amp; Whiskers</h4>
+              <span style="font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-light); font-weight: 700;">Pet Care &amp; Grooming Centre</span>
+            </div>
+          </div>
+          <p>Malaysia's premier boutique pet spa offering specialized hydro-treatments, customized scissor styling, and fear-free feline &amp; rabbit care.</p>
+        </div>
+        <div>
+          <h4>Quick Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="service.html">Our Standard Services</a></li>
+            <li><a href="packages.html">Packages &amp; Combo Calculator</a></li>
+            <li><a href="groomers.html">Meet Our Certified Groomers</a></li>
+            <li><a href="booking.html">Book an Appointment</a></li>
+            <li><button type="button" id="openSvgModalBtn" style="background:none; border:none; color:var(--accent-light); cursor:pointer; font-size:inherit; font-family:inherit; padding:0; display:inline-flex; align-items:center; gap:0.35rem; font-weight:600;">📥 Download Pet Rain Icons</button></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Boutique Hours &amp; Location</h4>
+          <p>📍 No. 28, Jalan Telawi 3, Bangsar Baru, 59100 Kuala Lumpur</p>
+          <p>📞 +60 3-2284 9910</p>
+          <p>🕘 Tue – Sun: 9:30 AM – 7:00 PM</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Paws &amp; Whiskers Pet Care &amp; Grooming Centre. Built with Semantic HTML5, CSS3 &amp; Vanilla JS.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

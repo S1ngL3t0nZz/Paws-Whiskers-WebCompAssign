@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book an Appointment | Paws &amp; Whiskers</title>
+  <meta name="description" content="Book an appointment online for dog, cat, or rabbit grooming at Paws &amp; Whiskers Pet Care &amp; Grooming Centre." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="promo-bar">
+    <div class="container promo-bar-inner">
+      <span id="timeGreeting" class="greeting-badge">☀️ Welcome, Pet Parent!</span>
+      <div class="tip-rotator">
+        <span id="rotatingTip">📅 No deposit required for prototype bookings—instant confirmation reference generated!</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" aria-label="Paws and Whiskers Home">
+        <img src="assets/images/paws-whiskers-logo.png" alt="Paws &amp; Whiskers Logo" class="brand-logo-img">
+        <div>
+          Paws &amp; Whiskers
+          <span class="brand-subtitle">Pet Care &amp; Grooming Centre</span>
+        </div>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="service.html">Our Services</a></li>
+        <li><a href="packages.html">Packages &amp; Calculator</a></li>
+        <li><a href="groomers.html">Meet Our Groomers</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="booking.html" class="btn-nav active">Book Appointment</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="text-drop-shadow">Book Your Pet's <span class="text-glow-neon" style="color:var(--accent-light);">Spa Appointment</span></h1>
+      <p>Schedule your visit in under 60 seconds using our intuitive client-side scheduling dashboard.</p>
+    </div>
+  </section>
+
+  <main class="section">
+    <div class="container" style="max-width: 820px;">
+      <!-- Requirement 5: Interactive Scheduling Form with all 7 required fields -->
+      <div class="calc-panel">
+        <h2 style="color: var(--primary-dark); margin-bottom: 1.25rem;">🐾 Appointment Scheduling Dashboard</h2>
+
+        <form id="bookingForm">
+          <div class="form-grid">
+            <!-- 1. Owner Name -->
+            <div class="form-group">
+              <label for="ownerName">Owner Full Name *</label>
+              <input type="text" id="ownerName" class="form-control" placeholder="e.g., Nurul Izzah / Jason Tan" required />
+            </div>
+
+            <!-- 2. Contact Phone -->
+            <div class="form-group">
+              <label for="contactPhone">Contact Phone (Malaysia) *</label>
+              <input type="tel" id="contactPhone" class="form-control" placeholder="e.g., 012-345 6789" required />
+            </div>
+
+            <!-- 3. Pet Type -->
+            <div class="form-group">
+              <label for="petType">Pet Type *</label>
+              <select id="petType" class="form-control" required>
+                <option value="Dog">🐶 Dog</option>
+                <option value="Cat">🐱 Cat</option>
+                <option value="Rabbit">🐰 Rabbit</option>
+              </select>
+            </div>
+
+            <!-- 4. Pet Name -->
+            <div class="form-group">
+              <label for="petName">Pet Name *</label>
+              <input type="text" id="petName" class="form-control" placeholder="e.g., Kopi, Luna, Oreo" required />
+            </div>
+
+            <!-- 5. Selected Package -->
+            <div class="form-group full">
+              <label for="selectedPackage">Selected Grooming Package / Service *</label>
+              <select id="selectedPackage" class="form-control" required>
+                <option value="Gold Royal Spa (RM 175)">🥇 Gold Royal Spa Package (RM 175)</option>
+                <option value="Silver Deluxe (RM 125)">🥈 Silver Deluxe Package (RM 125)</option>
+                <option value="Bronze Essential (RM 75)">🥉 Bronze Essential Package (RM 75)</option>
+                <option value="Royal Aromatherapy Spa Retreat (RM 185)">✨ Royal Aromatherapy Spa Retreat (RM 185)</option>
+                <option value="Feline Zen Velvet Groom & De-Shed (RM 145)">🐱 Feline Zen Velvet Groom &amp; De-Shed (RM 145)</option>
+                <option value="Derma-Care Hypoallergenic Medi-Bath (RM 160)">🩺 Derma-Care Hypoallergenic Medi-Bath (RM 160)</option>
+                <option value="Gentle Bunny Brush & Nail Care (RM 68)">🐰 Gentle Bunny Brush &amp; Nail Care (RM 68)</option>
+              </select>
+            </div>
+
+            <!-- 6. Appointment Date -->
+            <div class="form-group">
+              <label for="appointmentDate">Appointment Date *</label>
+              <input type="date" id="appointmentDate" class="form-control" required />
+            </div>
+
+            <!-- 7. Time Slot -->
+            <div class="form-group">
+              <label for="timeSlot">Preferred Time Slot *</label>
+              <select id="timeSlot" class="form-control" required>
+                <option value="09:30 AM - Morning Fresh">09:30 AM (Morning Fresh Slot)</option>
+                <option value="11:30 AM - Midday Spa">11:30 AM (Midday Spa Slot)</option>
+                <option value="02:00 PM - Afternoon Calm">02:00 PM (Afternoon Calm Slot)</option>
+                <option value="04:30 PM - Evening Express">04:30 PM (Evening Express Slot)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;">
+            Confirm Booking &amp; Generate Pass
+          </button>
+        </form>
+
+        <div
+          id="bookingConfirmationBox"
+          style="display: none; margin-top: 1.5rem; padding: 1.25rem; border-radius: 12px; background: #ecfdf5; border: 2px solid #10b981;"
+        ></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        &copy; 2026 Paws &amp; Whiskers Pet Care &amp; Grooming Centre.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

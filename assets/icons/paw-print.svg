@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="128" height="128">
+  <!-- 5 Toe Beans and Main Paw Pad -->
+  <g fill="currentColor">
+    <!-- Center top toe -->
+    <ellipse cx="50" cy="27" rx="11" ry="15"/>
+    <!-- Upper Left toe -->
+    <ellipse cx="27" cy="38" rx="10" ry="14" transform="rotate(-18 27 38)"/>
+    <!-- Upper Right toe -->
+    <ellipse cx="73" cy="38" rx="10" ry="14" transform="rotate(18 73 38)"/>
+    <!-- Lower Left toe -->
+    <ellipse cx="19" cy="62" rx="8" ry="10" transform="rotate(-35 19 62)"/>
+    <!-- Lower Right toe -->
+    <ellipse cx="81" cy="62" rx="8" ry="10" transform="rotate(35 81 62)"/>
+    <!-- Main Paw Pad -->
+    <path d="M29 65 C25 76 34 85 50 85 C66 85 75 76 71 65 C68 53 58 48 50 48 C42 48 32 53 29 65 Z"/>
+  </g>
+  <!-- Subtle Highlights -->
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round" opacity="0.4" stroke-width="2.5">
+    <path d="M47 18 C45 22 44 26 44 29"/>
+    <path d="M25 29 C24 33 23 37 23 40"/>
+    <path d="M71 29 C70 33 69 37 69 40"/>
+    <path d="M18 56 C17 59 17 62 17 64"/>
+    <path d="M80 56 C79 59 79 62 79 64"/>
+    <path d="M36 60 C40 54 48 52 56 54" stroke-width="3"/>
+  </g>
+</svg>

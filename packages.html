@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Packages &amp; Combo Calculator | Paws &amp; Whiskers</title>
+  <meta name="description" content="Compare our Bronze, Silver, and Gold grooming packages and use the live combo cost calculator for customized pet spa sessions." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="promo-bar">
+    <div class="container promo-bar-inner">
+      <span id="timeGreeting" class="greeting-badge">☀️ Welcome, Pet Parent!</span>
+      <div class="tip-rotator">
+        <span id="rotatingTip">✨ Book 2 or more pets in our Combo Calculator below for an automatic 10% Multi-Pet Discount!</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" aria-label="Paws and Whiskers Home">
+        <img src="assets/images/paws-whiskers-logo.png" alt="Paws &amp; Whiskers Logo" class="brand-logo-img">
+        <div>
+          Paws &amp; Whiskers
+          <span class="brand-subtitle">Pet Care &amp; Grooming Centre</span>
+        </div>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="service.html">Our Services</a></li>
+        <li><a href="packages.html" class="active">Packages &amp; Calculator</a></li>
+        <li><a href="groomers.html">Meet Our Groomers</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="booking.html" class="btn-nav">Book Appointment</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="text-drop-shadow">Grooming Packages &amp; <span class="text-glow-neon" style="color:var(--accent-light);">Live Combo Calculator</span></h1>
+      <p>Compare our Bronze, Silver, and Gold tiers side-by-side and customize your pet's exact spa combo with instant cost breakdown.</p>
+    </div>
+  </section>
+
+  <main class="section">
+    <div class="container">
+      <!-- Requirement 3: Structured Pricing Layout Comparing Bronze, Silver, and Gold -->
+      <div class="section-header">
+        <h2>Bronze vs. Silver vs. Gold Package Comparison</h2>
+        <p>Every package includes complimentary veterinary ear &amp; skin inspection, sanitary trim, and cage-free fluff drying.</p>
+      </div>
+
+      <div class="table-responsive" style="margin-bottom: 4rem;">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Treatment Feature</th>
+              <th>🥉 Bronze Essential</th>
+              <th>🥈 Silver Deluxe</th>
+              <th>🥇 Gold Royal Spa</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonTableBody">
+            <!-- Dynamically populated by script.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Requirement 3 & 7.3: Interactive Combo Calculator -->
+      <div class="section-header">
+        <span class="badge badge-gold">Instant Estimator</span>
+        <h2>Interactive Grooming Combo Calculator</h2>
+        <p>Select your package tier, pet size, and spa add-ons below. The calculator listens to every change and computes your itemized RM breakdown live.</p>
+      </div>
+
+      <div class="calculator-layout">
+        <form id="comboCalculatorForm" class="calc-panel">
+          <div class="form-group">
+            <label for="calcTier">1. Choose Base Grooming Package Tier</label>
+            <select id="calcTier" class="form-control">
+              <option value="bronze" data-price="75">🥉 Bronze Essential (RM 75)</option>
+              <option value="silver" data-price="125" selected>🥈 Silver Deluxe (RM 125)</option>
+              <option value="gold" data-price="175">🥇 Gold Royal Spa (RM 175)</option>
+            </select>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="calcPetSize">2. Pet Weight / Coat Size</label>
+              <select id="calcPetSize" class="form-control">
+                <option value="small" data-surcharge="0">Small Pet / Rabbit / Cat (&lt; 7 kg) [+RM 0]</option>
+                <option value="medium" data-surcharge="25">Medium Breed (7 – 15 kg) [+RM 25]</option>
+                <option value="large" data-surcharge="50">Large / Double-Coat Breed (16+ kg) [+RM 50]</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="calcPetCount">3. Number of Pets (2+ gets 10% OFF)</label>
+              <input type="number" id="calcPetCount" class="form-control" min="1" max="5" value="1" />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 0.5rem;">
+            <label>4. Customize Spa &amp; Medical Add-On Treatments</label>
+
+            <label class="Addon-check">
+              <span>🫧 Micro-Bubble Ozone Skin Detox</span>
+              <span><strong>+ RM 35</strong> <input type="checkbox" class="calc-addon" data-name="Micro-Bubble Ozone Detox" data-price="35" checked /></span>
+            </label>
+
+            <label class="Addon-check">
+              <span>🦷 Ultrasonic Emmi-Pet Plaque Scaling</span>
+              <span><strong>+ RM 45</strong> <input type="checkbox" class="calc-addon" data-name="Ultrasonic Dental Scaling" data-price="45" /></span>
+            </label>
+
+            <label class="Addon-check">
+              <span>🌿 Dead Sea Mineral De-Shedding Mud Mask</span>
+              <span><strong>+ RM 40</strong> <input type="checkbox" class="calc-addon" data-name="Dead Sea Mineral Mud Mask" data-price="40" /></span>
+            </label>
+
+            <label class="Addon-check">
+              <span>🐾 Organic Shea Butter Paw &amp; Nose Therapy</span>
+              <span><strong>+ RM 20</strong> <input type="checkbox" class="calc-addon" data-name="Organic Shea Paw Balm" data-price="20" /></span>
+            </label>
+
+            <label class="Addon-check">
+              <span>✂️ Severe Matting / Gentle Dematting Extension (+30m)</span>
+              <span><strong>+ RM 30</strong> <input type="checkbox" class="calc-addon" data-name="Gentle Dematting Extension" data-price="30" /></span>
+            </label>
+          </div>
+        </form>
+
+        <!-- Live Itemized Cost Breakdown -->
+        <aside class="receipt-panel" aria-live="polite">
+          <h3 style="margin-bottom: 0.35rem;">🧾 Live Cost Breakdown</h3>
+          <p style="font-size: 0.88rem; color: rgba(255,255,255,0.75); margin-bottom: 1.25rem;">
+            Updated automatically as you customize options
+          </p>
+
+          <div id="receiptBreakdown">
+            <!-- Dynamically updated via script.js -->
+          </div>
+
+          <div class="receipt-total">
+            <span>Estimated Total</span>
+            <span id="receiptTotalRM">RM 160.00</span>
+          </div>
+
+          <a id="bookCalculatedBtn" href="booking.html" class="btn btn-accent" style="width: 100%; margin-top: 1.5rem;">
+            Lock In This Combo &amp; Book ➔
+          </a>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        &copy; 2026 Paws &amp; Whiskers Pet Care &amp; Grooming Centre.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

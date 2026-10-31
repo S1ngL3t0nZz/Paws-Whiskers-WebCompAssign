@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Services | Paws &amp; Whiskers Pet Care</title>
+  <meta name="description" content="Explore our complete range of specialized pet care, scissor styling, and spa treatments for dogs, cats, and rabbits." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="promo-bar">
+    <div class="container promo-bar-inner">
+      <span id="timeGreeting" class="greeting-badge">☀️ Welcome, Pet Parent!</span>
+      <div class="tip-rotator">
+        <span id="rotatingTip">💡 Filter our 9 specialized services by Dog, Cat, or Rabbit below!</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" aria-label="Paws and Whiskers Home">
+        <img src="assets/images/paws-whiskers-logo.png" alt="Paws &amp; Whiskers Logo" class="brand-logo-img">
+        <div>
+          Paws &amp; Whiskers
+          <span class="brand-subtitle">Pet Care &amp; Grooming Centre</span>
+        </div>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="service.html" class="active">Our Services</a></li>
+        <li><a href="packages.html">Packages &amp; Calculator</a></li>
+        <li><a href="groomers.html">Meet Our Groomers</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="booking.html" class="btn-nav">Book Appointment</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="text-drop-shadow">Our Specialized <span class="text-glow-neon" style="color:var(--accent-light);">Pet Care Services</span></h1>
+      <p>Browse our tailored grooming, dermatology, and hygiene treatments for Dogs, Cats, and Rabbits—priced transparently in Malaysian Ringgit (RM).</p>
+    </div>
+  </section>
+
+  <main class="section">
+    <div class="container">
+      <!-- Requirement 7.2: Interactive Category Filter Bar -->
+      <div class="filter-bar" role="region" aria-label="Service Category Filter">
+        <div class="filter-buttons">
+          <button type="button" class="filter-btn active" data-category="All">🐾 All Pets</button>
+          <button type="button" class="filter-btn" data-category="Dog">🐶 Dog Services</button>
+          <button type="button" class="filter-btn" data-category="Cat">🐱 Cat Services</button>
+          <button type="button" class="filter-btn" data-category="Rabbit">🐰 Rabbit Services</button>
+        </div>
+        <span id="serviceCountLabel" style="font-weight: 600; color: var(--text-muted);">Showing all services</span>
+      </div>
+
+      <!-- Requirement 2: Minimum 8 Services dynamically rendered from JS array -->
+      <div id="servicesGrid" class="grid-3">
+        <!-- Dynamically rendered by initServicesPage() in script.js -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        &copy; 2026 Paws &amp; Whiskers Pet Care &amp; Grooming Centre. All service cards rendered dynamically via JavaScript Objects.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

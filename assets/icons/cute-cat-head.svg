@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="128" height="128">
+  <!-- Silhouette (Cat Head & Pointed Ears) -->
+  <path fill="currentColor" d="M21 21 C22 21 29 27 38 29 C44 27 56 27 62 29 C71 27 78 21 79 21 C82 20 86 26 85 36 C87 43 87 53 84 62 C80 73 68 81 50 81 C32 81 20 73 16 62 C13 53 13 43 15 36 C14 26 18 20 21 21 Z"/>
+  <!-- Ear Highlights -->
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round" opacity="0.4" stroke-width="3">
+    <path d="M25 24 C23 27 23 31 23 34"/>
+    <path d="M75 24 C77 27 77 31 77 34"/>
+  </g>
+  <!-- Eyes -->
+  <circle cx="37" cy="52" r="5" fill="#FFFFFF"/>
+  <circle cx="63" cy="52" r="5" fill="#FFFFFF"/>
+  <!-- Cute Snout & Smile -->
+  <g fill="#FFFFFF">
+    <ellipse cx="50" cy="60" rx="5" ry="3.8"/>
+    <path d="M50 60 L50 65 M42 64 C42 69 49 71 50 65 C51 71 58 64 58 64" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Whiskers -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.4">
+    <!-- Left Whiskers -->
+    <path d="M23 58 L31 59"/>
+    <path d="M23 65 L31 64"/>
+    <!-- Right Whiskers -->
+    <path d="M77 58 L69 59"/>
+    <path d="M77 65 L69 64"/>
+  </g>
+</svg>

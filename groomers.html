@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meet Our Groomers | Paws &amp; Whiskers</title>
+  <meta name="description" content="Meet our certified master pet groomers, feline whisperers, and derma-care specialists in Bangsar Baru, Kuala Lumpur." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="promo-bar">
+    <div class="container promo-bar-inner">
+      <span id="timeGreeting" class="greeting-badge">☀️ Welcome, Pet Parent!</span>
+      <div class="tip-rotator">
+        <span id="rotatingTip">👆 Click on any groomer card below to inspect their certificates, portfolio, and satisfaction scores!</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" aria-label="Paws and Whiskers Home">
+        <img src="assets/images/paws-whiskers-logo.png" alt="Paws &amp; Whiskers Logo" class="brand-logo-img">
+        <div>
+          Paws &amp; Whiskers
+          <span class="brand-subtitle">Pet Care &amp; Grooming Centre</span>
+        </div>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="service.html">Our Services</a></li>
+        <li><a href="packages.html">Packages &amp; Calculator</a></li>
+        <li><a href="groomers.html" class="active">Meet Our Groomers</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="booking.html" class="btn-nav">Book Appointment</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="text-drop-shadow">Meet Our <span class="text-glow-neon" style="color:var(--accent-light);">Certified Master Groomers</span></h1>
+      <p>Click on any team member's card to open an interactive profile modal featuring their accredited certificates, portfolios, and verified customer satisfaction ratings.</p>
+    </div>
+  </section>
+
+  <main class="section">
+    <div class="container">
+      <!-- Requirement 4: Groomer Cards dynamically rendered from JS Objects -->
+      <div id="groomersGrid" class="grid-4">
+        <!-- Dynamically populated by initGroomersPage() in script.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Requirement 7.4: Interactive Groomer Detail Modal -->
+  <div id="groomerModalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Groomer Portfolio Details">
+    <div class="modal-box">
+      <button type="button" id="closeModalBtn" class="modal-close" aria-label="Close Modal">✕</button>
+      <div id="groomerModalContent">
+        <!-- Populated dynamically when a groomer card is clicked -->
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        &copy; 2026 Paws &amp; Whiskers Pet Care &amp; Grooming Centre.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
