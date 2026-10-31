@@ -617,13 +617,13 @@ img {
 /* Cards & Grids */
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
 
 .grid-4 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.75rem;
 }
 
@@ -1249,3 +1249,184 @@ img {
   transform: translateX(-50%) translateY(0);
 }
 
+
+/* ==========================================================================
+   FORM VALIDATION & ERROR STATES
+   ========================================================================== */
+.form-control.invalid {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.22) !important;
+}
+
+.field-error {
+  display: none;
+  font-size: 0.82rem;
+  color: #b91c1c;
+  font-weight: 600;
+  margin-top: 0.35rem;
+  line-height: 1.4;
+}
+
+.field-error.visible {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ==========================================================================
+   STRUCTURED BOOKING PASS / RECEIPT (booking.html)
+   ========================================================================== */
+.booking-receipt-card {
+  background: #ffffff;
+  border: 2px dashed var(--primary);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 16px 36px -6px rgba(31, 95, 91, 0.16);
+  position: relative;
+  overflow: hidden;
+  animation: receiptSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes receiptSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 2px solid var(--surface-alt);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.receipt-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.receipt-badge-status {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #10b981;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.receipt-ref-code {
+  font-family: 'Outfit', monospace;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  letter-spacing: 0.08em;
+}
+
+.receipt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.receipt-item {
+  background: var(--bg);
+  padding: 0.95rem 1.15rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.receipt-item-label {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.receipt-item-value {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.receipt-notice {
+  background: #f0fdf4;
+  border-left: 4px solid #10b981;
+  padding: 0.85rem 1.15rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: #166534;
+  margin-bottom: 1.5rem;
+}
+
+.receipt-barcode-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.15rem;
+  background: var(--surface-alt);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.barcode-lines {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 44px;
+  margin-bottom: 0.4rem;
+}
+
+.barcode-bar {
+  background: #1e292b;
+  height: 100%;
+}
+
+.receipt-actions {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .booking-receipt-card, .booking-receipt-card * {
+    visibility: visible;
+  }
+  .booking-receipt-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: 2px solid #000;
+    box-shadow: none;
+  }
+  .receipt-actions {
+    display: none !important;
+  }
+}

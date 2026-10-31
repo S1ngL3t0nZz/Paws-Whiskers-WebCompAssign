@@ -650,6 +650,7 @@ function initPackagesAndCalculator() {
 
   const tierSelect = document.getElementById("calcTier");
   const sizeSelect = document.getElementById("calcPetSize");
+  const coatHealthSelect = document.getElementById("calcCoatHealth");
   const petCountInput = document.getElementById("calcPetCount");
   const addonCheckboxes = document.querySelectorAll(".calc-addon");
   const breakdownContainer = document.getElementById("receiptBreakdown");
@@ -665,6 +666,14 @@ function initPackagesAndCalculator() {
     const sizeLabel = selectedSizeOption.text;
     const sizeSurcharge = parseFloat(selectedSizeOption.dataset.surcharge || 0);
 
+    let coatHealthSurcharge = 0;
+    let coatHealthLabel = "Normal & Healthy Coat";
+    if (coatHealthSelect) {
+      const selectedCoatOption = coatHealthSelect.options[coatHealthSelect.selectedIndex];
+      coatHealthLabel = selectedCoatOption.text;
+      coatHealthSurcharge = parseFloat(selectedCoatOption.dataset.surcharge || 0);
+    }
+
     const petCount = Math.max(1, Math.min(5, parseInt(petCountInput.value, 10) || 1));
 
     let addonsTotal = 0;
@@ -677,7 +686,7 @@ function initPackagesAndCalculator() {
       }
     });
 
-    const singlePetSubtotal = basePrice + sizeSurcharge + addonsTotal;
+    const singlePetSubtotal = basePrice + sizeSurcharge + coatHealthSurcharge + addonsTotal;
     const grossTotal = singlePetSubtotal * petCount;
     const multiPetDiscount = petCount >= 2 ? grossTotal * 0.1 : 0;
     const finalTotal = grossTotal - multiPetDiscount;
@@ -691,6 +700,10 @@ function initPackagesAndCalculator() {
       <div class="receipt-line">
         <span>Size Adjustment (${sizeLabel.split(" (")[0]})</span>
         <strong>+ RM ${sizeSurcharge.toFixed(2)}</strong>
+      </div>
+      <div class="receipt-line">
+        <span>Coat Health (${coatHealthLabel.split(" (")[0].replace(/^[^\w]+/, "").trim()})</span>
+        <strong>+ RM ${coatHealthSurcharge.toFixed(2)}</strong>
       </div>
     `;
 
@@ -824,20 +837,32 @@ function initGroomersPage() {
   }
 }
 
-// 5. Booking Page Logic
+// 5. Booking Page Logic (Thorough Malaysian Phone & Future Date Validation + Structured Receipt)
 function initBookingPage() {
   const bookingForm = document.getElementById("bookingForm");
+  const ownerNameInput = document.getElementById("ownerName");
+  const contactPhoneInput = document.getElementById("contactPhone");
+  const petTypeSelect = document.getElementById("petType");
+  const petNameInput = document.getElementById("petName");
   const packageSelect = document.getElementById("selectedPackage");
   const dateInput = document.getElementById("appointmentDate");
+  const timeSlotSelect = document.getElementById("timeSlot");
   const confirmationBox = document.getElementById("bookingConfirmationBox");
 
   if (!bookingForm) return;
 
-  // Set minimum date to today
+  // Set minimum date to today (YYYY-MM-DD)
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const todayStr = `${year}-${month}-${day}`;
+
   if (dateInput) {
-    const today = new Date().toISOString().split("T")[0];
-    dateInput.min = today;
-    dateInput.value = today;
+    dateInput.min = todayStr;
+    if (!dateInput.value) {
+      dateInput.value = todayStr;
+    }
   }
 
   // Pre-fill package if passed in URL query string
@@ -846,7 +871,10 @@ function initBookingPage() {
   if (preselectedPkg && packageSelect) {
     let matched = false;
     for (let i = 0; i < packageSelect.options.length; i++) {
-      if (packageSelect.options[i].value === preselectedPkg || packageSelect.options[i].text.includes(preselectedPkg)) {
+      if (
+        packageSelect.options[i].value === preselectedPkg ||
+        packageSelect.options[i].text.includes(preselectedPkg)
+      ) {
         packageSelect.selectedIndex = i;
         matched = true;
         break;
@@ -861,31 +889,241 @@ function initBookingPage() {
     }
   }
 
+  // Validation helpers
+  function clearFieldError(fieldId) {
+    const field = document.getElementById(fieldId);
+    const errorEl = document.getElementById(fieldId + "Error");
+    if (field) field.classList.remove("invalid");
+    if (errorEl) {
+      errorEl.textContent = "";
+      errorEl.classList.remove("visible");
+    }
+  }
+
+  function setFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorEl = document.getElementById(fieldId + "Error");
+    if (field) field.classList.add("invalid");
+    if (errorEl) {
+      errorEl.textContent = `⚠️ ${message}`;
+      errorEl.classList.add("visible");
+    }
+  }
+
+  // Real-time error clearing when user types or changes an input
+  [ownerNameInput, contactPhoneInput, petTypeSelect, petNameInput, packageSelect, dateInput, timeSlotSelect].forEach(
+    (el) => {
+      if (!el) return;
+      el.addEventListener("input", () => clearFieldError(el.id));
+      el.addEventListener("change", () => clearFieldError(el.id));
+    }
+  );
+
+  // Validation Rule 1: Malaysian Phone Number Validation
+  function isValidMalaysianPhone(phoneStr) {
+    if (!phoneStr) return false;
+    // Strip common separators: spaces, hyphens, parentheses
+    const cleaned = phoneStr.replace(/[\s\-\(\)]/g, "");
+    // Malaysian mobile prefix: 010, 011, 012, 013, 014, 015, 016, 017, 018, 019
+    // Standard format: 01X-XXXXXXX (10-11 digits total) or +601XXXXXXXX
+    const regex = /^(?:\+?60|0)1[0-46-9][0-9]{7,8}$/;
+    return regex.test(cleaned);
+  }
+
+  // Validation Rule 2: Future Date Validation (Must be today or a future date)
+  function isFutureOrToday(dateStr) {
+    if (!dateStr) return false;
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return false;
+    const selected = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    selected.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return selected >= today;
+  }
+
   bookingForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const ownerName = document.getElementById("ownerName").value.trim();
-    const contactPhone = document.getElementById("contactPhone").value.trim();
-    const petType = document.getElementById("petType").value;
-    const petName = document.getElementById("petName").value.trim();
+
+    let isValid = true;
+    let firstInvalidField = null;
+
+    // 1. Validate Owner Name
+    const ownerName = ownerNameInput ? ownerNameInput.value.trim() : "";
+    if (!ownerName || ownerName.length < 3) {
+      setFieldError("ownerName", "Please enter your full name (minimum 3 characters).");
+      isValid = false;
+      if (!firstInvalidField) firstInvalidField = ownerNameInput;
+    } else {
+      clearFieldError("ownerName");
+    }
+
+    // 2. Validate Malaysian Phone Number
+    const rawPhone = contactPhoneInput ? contactPhoneInput.value.trim() : "";
+    if (!rawPhone) {
+      setFieldError("contactPhone", "Contact phone number is required.");
+      isValid = false;
+      if (!firstInvalidField) firstInvalidField = contactPhoneInput;
+    } else if (!isValidMalaysianPhone(rawPhone)) {
+      setFieldError(
+        "contactPhone",
+        "Please enter a valid Malaysian mobile number (e.g., 012-345 6789 or +60123456789)."
+      );
+      isValid = false;
+      if (!firstInvalidField) firstInvalidField = contactPhoneInput;
+    } else {
+      clearFieldError("contactPhone");
+    }
+
+    // 3. Validate Pet Name
+    const petName = petNameInput ? petNameInput.value.trim() : "";
+    if (!petName || petName.length < 2) {
+      setFieldError("petName", "Please enter your pet's name (minimum 2 characters).");
+      isValid = false;
+      if (!firstInvalidField) firstInvalidField = petNameInput;
+    } else {
+      clearFieldError("petName");
+    }
+
+    // 4. Validate Appointment Date (Future Date)
+    const appDate = dateInput ? dateInput.value : "";
+    if (!appDate) {
+      setFieldError("appointmentDate", "Please select an appointment date.");
+      isValid = false;
+      if (!firstInvalidField) firstInvalidField = dateInput;
+    } else if (!isFutureOrToday(appDate)) {
+      setFieldError("appointmentDate", "Appointment date cannot be in the past. Please choose today or a future date.");
+      isValid = false;
+      if (!firstInvalidField) firstInvalidField = dateInput;
+    } else {
+      clearFieldError("appointmentDate");
+    }
+
+    if (!isValid) {
+      if (firstInvalidField) {
+        firstInvalidField.focus();
+      }
+      return;
+    }
+
+    // Collect validated fields
+    const petType = petTypeSelect.value;
     const selectedPkg = packageSelect.value;
-    const appDate = dateInput.value;
-    const timeSlot = document.getElementById("timeSlot").value;
+    const timeSlot = timeSlotSelect.value;
 
-    const refCode = "PW-" + Math.floor(100000 + Math.random() * 900000);
+    // Generate unique reference ID
+    const refCode = "PW-2026-" + Math.floor(100000 + Math.random() * 900000);
+    const bookingTimestamp = new Date().toLocaleDateString("en-MY", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
 
+    // Format display date
+    const dateObj = new Date(appDate + "T00:00:00");
+    const friendlyDate = dateObj.toLocaleDateString("en-MY", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
+    const petIcon = petType === "Dog" ? "🐶" : petType === "Cat" ? "🐱" : "🐰";
+    const zoneName = petType === "Dog" ? "Soundproof Hydro-Spa Pavilion" : petType === "Cat" ? "Pheromone Feline Suite" : "Quiet Exotic Mammal Zone";
+
+    // Generate barcode lines
+    const barcodeBars = Array.from({ length: 42 })
+      .map((_, i) => `<div class="barcode-bar" style="width: ${(i % 3 === 0 ? 3 : i % 2 === 0 ? 2 : 1.5)}px;"></div>`)
+      .join("");
+
+    // Inject gorgeous structured booking receipt
     confirmationBox.style.display = "block";
     confirmationBox.innerHTML = `
-      <h3 style="color:var(--primary-dark); margin-bottom:0.5rem;" class="text-bouncy">✅ Appointment Confirmed! (Ref: ${refCode})</h3>
-      <p style="margin-bottom:0.85rem;">Thank you, <strong>${ownerName}</strong>! Our salon concierge is ready to welcome <strong>${petName}</strong> (${petType}).</p>
-      <div style="background:#fff; padding:1.15rem; border-radius:12px; border:1px solid var(--border); font-size:0.95rem; box-shadow:var(--shadow);">
-        <p><strong>Package / Service:</strong> ${selectedPkg}</p>
-        <p><strong>Scheduled Date & Slot:</strong> ${appDate} at ${timeSlot}</p>
-        <p><strong>SMS Reminder Sent To:</strong> ${contactPhone}</p>
+      <div class="booking-receipt-card" role="region" aria-label="Official Booking Pass">
+        <div class="receipt-header">
+          <div class="receipt-header-left">
+            <img src="assets/images/paws-whiskers-logo.png" alt="Logo" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover;" />
+            <div>
+              <h3 style="margin: 0; color: var(--primary-dark); font-size: 1.25rem;">Paws &amp; Whiskers Pet Spa</h3>
+              <span style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.06em;">Official Appointment Confirmation Pass</span>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span class="receipt-badge-status">✅ Confirmed &amp; Reserved</span>
+            <div class="receipt-ref-code">${refCode}</div>
+          </div>
+        </div>
+
+        <div class="receipt-grid">
+          <div class="receipt-item">
+            <div class="receipt-item-label">Pet Parent / Owner</div>
+            <div class="receipt-item-value">${ownerName}</div>
+            <small style="color: var(--primary); font-weight: 600;">📱 ${rawPhone}</small>
+          </div>
+
+          <div class="receipt-item">
+            <div class="receipt-item-label">Pet Guest Details</div>
+            <div class="receipt-item-value">${petIcon} ${petName} (${petType})</div>
+            <small style="color: var(--text-muted);">Assigned to: ${zoneName}</small>
+          </div>
+
+          <div class="receipt-item">
+            <div class="receipt-item-label">Scheduled Date &amp; Slot</div>
+            <div class="receipt-item-value">${timeSlot.split(" (")[0]}</div>
+            <small style="color: var(--primary-dark); font-weight: 600;">📅 ${friendlyDate}</small>
+          </div>
+
+          <div class="receipt-item">
+            <div class="receipt-item-label">Package / Treatment</div>
+            <div class="receipt-item-value" style="font-size: 0.92rem;">${selectedPkg}</div>
+            <small style="color: var(--accent); font-weight: 700;">100% Cage-Free Guarantee</small>
+          </div>
+        </div>
+
+        <div class="receipt-notice">
+          <strong>📍 Arrival Instructions:</strong> No. 28, Jalan Telawi 3, Bangsar Baru, 59100 Kuala Lumpur.<br />
+          Complimentary 15-minute VIP drop-off parking bays are reserved directly in front of the salon. A reminder SMS has been queued for <strong>${rawPhone}</strong>.
+        </div>
+
+        <div class="receipt-barcode-box">
+          <div class="barcode-lines">${barcodeBars}</div>
+          <span style="font-size: 0.75rem; letter-spacing: 0.12em; color: var(--text-muted); font-weight: 700;">PASS REF: ${refCode} • ISSUED ${bookingTimestamp}</span>
+        </div>
+
+        <div class="receipt-actions">
+          <button type="button" class="btn btn-outline" id="printPassBtn" style="padding: 0.55rem 1.15rem; font-size: 0.9rem;">
+            🖨️ Print / Save Booking Pass
+          </button>
+          <button type="button" class="btn btn-primary" id="bookAnotherBtn" style="padding: 0.55rem 1.15rem; font-size: 0.9rem;">
+            ➕ Book Another Appointment
+          </button>
+        </div>
       </div>
     `;
-    confirmationBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    bookingForm.reset();
-    if (dateInput) dateInput.value = appDate;
+
+    confirmationBox.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Print button handler
+    const printBtn = document.getElementById("printPassBtn");
+    if (printBtn) {
+      printBtn.addEventListener("click", () => window.print());
+    }
+
+    // Book another button handler
+    const bookAnotherBtn = document.getElementById("bookAnotherBtn");
+    if (bookAnotherBtn) {
+      bookAnotherBtn.addEventListener("click", () => {
+        bookingForm.reset();
+        confirmationBox.style.display = "none";
+        if (dateInput) dateInput.value = todayStr;
+        bookingForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
   });
 }
 

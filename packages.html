@@ -32,7 +32,7 @@
 
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
-        <li><a href="service.html">Our Services</a></li>
+        <li><a href="services.html">Our Services</a></li>
         <li><a href="packages.html" class="active">Packages &amp; Calculator</a></li>
         <li><a href="groomers.html">Meet Our Groomers</a></li>
         <li><a href="contact.html">Contact Us</a></li>
@@ -76,7 +76,7 @@
       <div class="section-header">
         <span class="badge badge-gold">Instant Estimator</span>
         <h2>Interactive Grooming Combo Calculator</h2>
-        <p>Select your package tier, pet size, and spa add-ons below. The calculator listens to every change and computes your itemized RM breakdown live.</p>
+        <p>Select your package tier, pet size, coat health condition, and spa add-ons below. The calculator computes your itemized RM breakdown live.</p>
       </div>
 
       <div class="calculator-layout">
@@ -92,7 +92,7 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="calcPetSize">2. Pet Weight / Coat Size</label>
+              <label for="calcPetSize">2. Pet Weight / Body Size</label>
               <select id="calcPetSize" class="form-control">
                 <option value="small" data-surcharge="0">Small Pet / Rabbit / Cat (&lt; 7 kg) [+RM 0]</option>
                 <option value="medium" data-surcharge="25">Medium Breed (7 – 15 kg) [+RM 25]</option>
@@ -101,13 +101,22 @@
             </div>
 
             <div class="form-group">
-              <label for="calcPetCount">3. Number of Pets (2+ gets 10% OFF)</label>
-              <input type="number" id="calcPetCount" class="form-control" min="1" max="5" value="1" />
+              <label for="calcCoatHealth">3. Pet Coat Health &amp; Condition</label>
+              <select id="calcCoatHealth" class="form-control">
+                <option value="healthy" data-surcharge="0" selected>✨ Normal &amp; Healthy Coat [+RM 0]</option>
+                <option value="moderate" data-surcharge="20">🧶 Moderate Tangles / Heavy Undercoat [+RM 20]</option>
+                <option value="matted" data-surcharge="40">✂️ Severe Matting / Sensitive Skin Therapy [+RM 40]</option>
+              </select>
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="calcPetCount">4. Number of Pets (2+ gets 10% Multi-Pet Discount)</label>
+            <input type="number" id="calcPetCount" class="form-control" min="1" max="5" value="1" />
+          </div>
+
           <div class="form-group" style="margin-top: 0.5rem;">
-            <label>4. Customize Spa &amp; Medical Add-On Treatments</label>
+            <label>5. Customize Spa &amp; Medical Add-On Treatments</label>
 
             <label class="Addon-check">
               <span>🫧 Micro-Bubble Ozone Skin Detox</span>
@@ -130,7 +139,7 @@
             </label>
 
             <label class="Addon-check">
-              <span>✂️ Severe Matting / Gentle Dematting Extension (+30m)</span>
+              <span>✂️ Gentle Dematting Extension (+30m)</span>
               <span><strong>+ RM 30</strong> <input type="checkbox" class="calc-addon" data-name="Gentle Dematting Extension" data-price="30" /></span>
             </label>
           </div>
