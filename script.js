@@ -66,11 +66,11 @@ const petServicesData = [
   },
   {
     id: "srv-4",
-    title: "Micro-Bubble Ozone Skin Therapy",
-    price: 110,
-    category: "Dog",
-    image: "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=700&q=80",
-    description: "Milky nano-bubbles penetrate deep into hair follicles to remove yeast, dander, and excess sebum without harsh scrubbing."
+    title: "Holland Lop Herbal Lavender Dry-Spa",
+    price: 75,
+    category: "Rabbit",
+    image: "https://images.unsplash.com/photo-1591382696684-38c427c7547a?auto=format&fit=crop&w=700&q=80",
+    description: "100% waterless calming chamomile & lavender dry foam cleanse, delicate scent-gland check, sanitary trim, and organic paw balm massage for sensitive bunnies."
   },
   {
     id: "srv-5",
@@ -568,7 +568,11 @@ function initServicesPage() {
         : petServicesData.filter((item) => item.category === categoryFilter);
 
     if (countLabel) {
-      countLabel.textContent = `Showing ${filtered.length} of ${petServicesData.length} services`;
+      if (categoryFilter === "All") {
+        countLabel.textContent = `Showing all ${petServicesData.length} services (3 Dogs, 3 Cats, 3 Rabbits)`;
+      } else {
+        countLabel.textContent = `Showing ${filtered.length} of ${petServicesData.length} services (${categoryFilter}s)`;
+      }
     }
 
     servicesGrid.innerHTML = filtered
@@ -980,6 +984,15 @@ const bookingCatalog = [
     category: "Rabbit",
     icon: "🌾",
     desc: "Specialized wool-coat dematting & chamomile paw pad conditioning (🐰 Rabbit Exclusive)."
+  },
+  {
+    id: "rabbit-lavender",
+    name: "Holland Lop Herbal Lavender Dry-Spa (RM 75)",
+    shortName: "Bunny Herbal Lavender Dry-Spa",
+    price: 75,
+    category: "Rabbit",
+    icon: "🌿",
+    desc: "100% waterless chamomile & lavender dry foam cleanse, ear care, sanitary trim & organic paw balm (🐰 Rabbit Exclusive)."
   }
 ];
 
