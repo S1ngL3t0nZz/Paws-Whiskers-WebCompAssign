@@ -81,6 +81,10 @@
                 <option value="Cat">🐱 Cat</option>
                 <option value="Rabbit">🐰 Rabbit</option>
               </select>
+              <div id="petLockNotice" class="pet-type-notice unlocked">
+                <span><span id="petLockIcon">🐾</span> <span id="petLockText">Select pet species to filter services</span></span>
+                <button type="button" id="petUnlockBtn" class="pet-unlock-btn" style="display:none;" title="Switch to an All-Pets package to unlock pet species">🔓 Switch to All-Pets</button>
+              </div>
               <span class="field-error" id="petTypeError" role="alert"></span>
             </div>
 
@@ -93,16 +97,14 @@
 
             <!-- 5. Selected Package -->
             <div class="form-group full">
-              <label for="selectedPackage">Selected Grooming Package / Service *</label>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.4rem;">
+                <label for="selectedPackage" style="margin-bottom:0;">Selected Grooming Package / Service *</label>
+                <span id="packageFilterTag" class="badge badge-gold" style="font-size:0.75rem;">Filtered by Pet Type</span>
+              </div>
               <select id="selectedPackage" class="form-control" required>
-                <option value="Gold Royal Spa (RM 175)">🥇 Gold Royal Spa Package (RM 175)</option>
-                <option value="Silver Deluxe (RM 125)">🥈 Silver Deluxe Package (RM 125)</option>
-                <option value="Bronze Essential (RM 75)">🥉 Bronze Essential Package (RM 75)</option>
-                <option value="Royal Aromatherapy Spa Retreat (RM 185)">✨ Royal Aromatherapy Spa Retreat (RM 185)</option>
-                <option value="Feline Zen Velvet Groom & De-Shed (RM 145)">🐱 Feline Zen Velvet Groom &amp; De-Shed (RM 145)</option>
-                <option value="Derma-Care Hypoallergenic Medi-Bath (RM 160)">🩺 Derma-Care Hypoallergenic Medi-Bath (RM 160)</option>
-                <option value="Gentle Bunny Brush & Nail Care (RM 68)">🐰 Gentle Bunny Brush &amp; Nail Care (RM 68)</option>
+                <!-- Populated dynamically via script.js based on Pet Type -->
               </select>
+              <div id="serviceDetailsHint" style="font-size:0.84rem; color:var(--text-muted); margin-top:0.4rem; line-height:1.45;"></div>
               <span class="field-error" id="selectedPackageError" role="alert"></span>
             </div>
 

@@ -837,7 +837,170 @@ function initGroomersPage() {
   }
 }
 
-// 5. Booking Page Logic (Thorough Malaysian Phone & Future Date Validation + Structured Receipt)
+// Master Booking Catalog with Pet Type Rules (Universal vs. Exclusive)
+const bookingCatalog = [
+  // Universal Packages (All Pets: Dog, Cat, Rabbit)
+  {
+    id: "pkg-gold",
+    name: "Gold Royal Spa Package (RM 175)",
+    shortName: "Gold Royal Spa",
+    price: 175,
+    category: "All",
+    icon: "🥇",
+    desc: "Micro-bubble ozone, Dead Sea mud bath, master contour scissor trim & ultrasonic dental hygiene."
+  },
+  {
+    id: "pkg-silver",
+    name: "Silver Deluxe Package (RM 125)",
+    shortName: "Silver Deluxe",
+    price: 125,
+    category: "All",
+    icon: "🥈",
+    desc: "Oatmeal honey bath, nail clipping/dremel, body contour styling & dental enzymatic massage."
+  },
+  {
+    id: "pkg-bronze",
+    name: "Bronze Essential Package (RM 75)",
+    shortName: "Bronze Essential",
+    price: 75,
+    category: "All",
+    icon: "🥉",
+    desc: "2x botanical wash, blowout, nail trim, hygienic sanitary neaten & breath freshener spray."
+  },
+  {
+    id: "pkg-aromatherapy",
+    name: "Royal Aromatherapy Spa Retreat (RM 185)",
+    shortName: "Royal Aromatherapy Spa Retreat",
+    price: 185,
+    category: "All",
+    icon: "✨",
+    desc: "Warm Dead Sea mineral mud bath, lavender hydro-massage & ultrasonic dental care."
+  },
+  {
+    id: "pkg-dermacare",
+    name: "Derma-Care Hypoallergenic Medi-Bath (RM 160)",
+    shortName: "Derma-Care Hypoallergenic Medi-Bath",
+    price: 160,
+    category: "All",
+    icon: "🩺",
+    desc: "Vet-formulated oatmeal & micro-bubble ozone bath for sensitive, allergic, or dry skin."
+  },
+
+  // Dog-Exclusive Services
+  {
+    id: "dog-scissor",
+    name: "Full Breed-Standard Scissor Styling (RM 120)",
+    shortName: "Full Breed-Standard Scissor Styling",
+    price: 120,
+    category: "Dog",
+    icon: "✂️",
+    desc: "Precision hand-scissoring tailored to Poodles, Bichons, Shih Tzus & Terriers (🐶 Dog Exclusive)."
+  },
+  {
+    id: "dog-ozone",
+    name: "Micro-Bubble Ozone Skin Therapy (RM 110)",
+    shortName: "Micro-Bubble Ozone Skin Therapy",
+    price: 110,
+    category: "Dog",
+    icon: "🫧",
+    desc: "Nano-bubble sebum, yeast, and deep pore odor cleansing (🐶 Dog Exclusive)."
+  },
+  {
+    id: "dog-dental",
+    name: "Ultrasonic Emmi-Pet Dental Hygiene (RM 85)",
+    shortName: "Ultrasonic Emmi-Pet Dental Hygiene",
+    price: 85,
+    category: "Dog",
+    icon: "🦷",
+    desc: "Vibration-free motionless ultrasound plaque and tartar neutralization (🐶 Dog Exclusive)."
+  },
+  {
+    id: "dog-deshed",
+    name: "Double-Coat De-Shedding Mud Treatment (RM 130)",
+    shortName: "Double-Coat De-Shedding Mud Treatment",
+    price: 130,
+    category: "Dog",
+    icon: "🐕",
+    desc: "Undercoat release for Huskies, Corgis, Golden Retrievers & Spitz (🐶 Dog Exclusive)."
+  },
+
+  // Cat-Exclusive Services
+  {
+    id: "cat-feline-zen",
+    name: "Feline Zen Velvet Groom & De-Shed (RM 145)",
+    shortName: "Feline Zen Velvet Groom & De-Shed",
+    price: 145,
+    category: "Cat",
+    icon: "🐱",
+    desc: "Conducted in soundproof feline suite with calming pheromone diffusers & claw caps (🐱 Cat Exclusive)."
+  },
+  {
+    id: "cat-hydro",
+    name: "Feline Calm Hydro-Bath & Blowout (RM 95)",
+    shortName: "Feline Calm Hydro-Bath & Blowout",
+    price: 95,
+    category: "Cat",
+    icon: "🛁",
+    desc: "Low-noise botanical wash, tear-stain cleansing & warm quiet fluff dry (🐱 Cat Exclusive)."
+  },
+  {
+    id: "cat-lion",
+    name: "Persian & Maine Coon Lion/Teddy Clip (RM 135)",
+    shortName: "Persian & Maine Coon Lion/Teddy Clip",
+    price: 135,
+    category: "Cat",
+    icon: "🦁",
+    desc: "Safe sedation-free dematting and stylish teddy or lion clip (🐱 Cat Exclusive)."
+  },
+  {
+    id: "cat-claw",
+    name: "Feline Claw Spa & Soft Paws Application (RM 55)",
+    shortName: "Feline Claw Spa & Soft Paws Application",
+    price: 55,
+    category: "Cat",
+    icon: "🐾",
+    desc: "Precision claw tipping, paw fur neatening, organic shea butter & vinyl caps (🐱 Cat Exclusive)."
+  },
+
+  // Rabbit-Exclusive Services
+  {
+    id: "rabbit-brush",
+    name: "Gentle Bunny Brush, Scent-Gland & Nail Care (RM 68)",
+    shortName: "Gentle Bunny Brush & Nail Care",
+    price: 68,
+    category: "Rabbit",
+    icon: "🐰",
+    desc: "100% dry stress-free undercoat carding, scent-gland check & nail trim (🐰 Rabbit Exclusive)."
+  },
+  {
+    id: "rabbit-angora",
+    name: "Angora & Lionhead Detangling Spa (RM 88)",
+    shortName: "Angora & Lionhead Detangling Spa",
+    price: 88,
+    category: "Rabbit",
+    icon: "🌾",
+    desc: "Specialized wool-coat dematting & chamomile paw pad conditioning (🐰 Rabbit Exclusive)."
+  }
+];
+
+// Helper to look up service in master catalog
+function findServiceInCatalog(query) {
+  if (!query) return null;
+  const q = query.toLowerCase().trim();
+  return (
+    bookingCatalog.find(
+      (s) =>
+        s.name.toLowerCase() === q ||
+        s.shortName.toLowerCase() === q ||
+        s.id.toLowerCase() === q ||
+        q.includes(s.shortName.toLowerCase()) ||
+        s.shortName.toLowerCase().includes(q) ||
+        q.includes(s.name.toLowerCase())
+    ) || null
+  );
+}
+
+// 5. Booking Page Logic (Species-Exclusive Locking + Malaysian Phone Validation + Structured Receipt)
 function initBookingPage() {
   const bookingForm = document.getElementById("bookingForm");
   const ownerNameInput = document.getElementById("ownerName");
@@ -848,8 +1011,14 @@ function initBookingPage() {
   const dateInput = document.getElementById("appointmentDate");
   const timeSlotSelect = document.getElementById("timeSlot");
   const confirmationBox = document.getElementById("bookingConfirmationBox");
+  const petLockNotice = document.getElementById("petLockNotice");
+  const petLockIcon = document.getElementById("petLockIcon");
+  const petLockText = document.getElementById("petLockText");
+  const petUnlockBtn = document.getElementById("petUnlockBtn");
+  const packageFilterTag = document.getElementById("packageFilterTag");
+  const serviceDetailsHint = document.getElementById("serviceDetailsHint");
 
-  if (!bookingForm) return;
+  if (!bookingForm || !petTypeSelect || !packageSelect) return;
 
   // Set minimum date to today (YYYY-MM-DD)
   const now = new Date();
@@ -865,28 +1034,167 @@ function initBookingPage() {
     }
   }
 
-  // Pre-fill package if passed in URL query string
-  const params = new URLSearchParams(window.location.search);
-  const preselectedPkg = params.get("pkg");
-  if (preselectedPkg && packageSelect) {
+  // Populate services dropdown according to the current pet type
+  function populateServicesForPet(currentPet, desiredServiceName = null) {
+    const exclusiveServices = bookingCatalog.filter((s) => s.category === currentPet);
+    const universalServices = bookingCatalog.filter((s) => s.category === "All");
+
+    let html = "";
+    if (exclusiveServices.length > 0) {
+      const petEmoji = currentPet === "Dog" ? "🐶" : currentPet === "Cat" ? "🐱" : "🐰";
+      html += `<optgroup label="🌟 ${petEmoji} ${currentPet} Exclusive Treatments">`;
+      exclusiveServices.forEach((s) => {
+        html += `<option value="${s.name}">${s.icon} ${s.name}</option>`;
+      });
+      html += `</optgroup>`;
+    }
+
+    html += `<optgroup label="🐾 All-Pets Universal Spa Packages">`;
+    universalServices.forEach((s) => {
+      html += `<option value="${s.name}">${s.icon} ${s.name}</option>`;
+    });
+    html += `</optgroup>`;
+
+    packageSelect.innerHTML = html;
+
+    if (packageFilterTag) {
+      packageFilterTag.textContent = `Filtered for ${currentPet}`;
+    }
+
+    // Try to select desired service if compatible
     let matched = false;
-    for (let i = 0; i < packageSelect.options.length; i++) {
-      if (
-        packageSelect.options[i].value === preselectedPkg ||
-        packageSelect.options[i].text.includes(preselectedPkg)
-      ) {
-        packageSelect.selectedIndex = i;
-        matched = true;
-        break;
+    if (desiredServiceName) {
+      const match = findServiceInCatalog(desiredServiceName);
+      if (match && (match.category === "All" || match.category === currentPet)) {
+        for (let i = 0; i < packageSelect.options.length; i++) {
+          if (packageSelect.options[i].value === match.name) {
+            packageSelect.selectedIndex = i;
+            matched = true;
+            break;
+          }
+        }
       }
     }
-    if (!matched) {
-      const customOption = document.createElement("option");
-      customOption.value = preselectedPkg;
-      customOption.textContent = `Selected: ${preselectedPkg}`;
-      customOption.selected = true;
-      packageSelect.prepend(customOption);
+
+    if (!matched && packageSelect.options.length > 0) {
+      packageSelect.selectedIndex = 0;
     }
+
+    syncLockState();
+  }
+
+  // Synchronize lock status between selected service and pet type
+  function syncLockState() {
+    const selectedVal = packageSelect.value;
+    const currentService = findServiceInCatalog(selectedVal);
+
+    if (!currentService) return;
+
+    // Display service description and tag
+    if (serviceDetailsHint) {
+      const catLabel =
+        currentService.category === "All"
+          ? "✅ Universal (All Pets: Dog, Cat, Rabbit)"
+          : `🔒 ${currentService.category} Exclusive Treatment`;
+      serviceDetailsHint.innerHTML = `<strong>${currentService.icon} ${currentService.shortName}:</strong> ${currentService.desc} <span style="display:inline-block; margin-top:0.25rem; font-weight:700; color:var(--primary-dark); font-size:0.8rem; background:rgba(31,95,91,0.08); padding:0.15rem 0.45rem; border-radius:6px;">${catLabel}</span>`;
+    }
+
+    // LOCKING RULES:
+    if (currentService.category !== "All") {
+      // 1. Force pet type to match the exclusive service
+      if (petTypeSelect.value !== currentService.category) {
+        petTypeSelect.value = currentService.category;
+      }
+
+      // 2. Disable incompatible pet options so pet type cannot be changed while this exclusive service is chosen
+      Array.from(petTypeSelect.options).forEach((opt) => {
+        if (opt.value !== currentService.category) {
+          opt.disabled = true;
+          opt.textContent = `${opt.value === "Dog" ? "🐶" : opt.value === "Cat" ? "🐱" : "🐰"} ${opt.value} (Unavailable for ${currentService.category} service)`;
+        } else {
+          opt.disabled = false;
+          opt.textContent = `${opt.value === "Dog" ? "🐶" : opt.value === "Cat" ? "🐱" : "🐰"} ${opt.value} (Locked to this exclusive service)`;
+        }
+      });
+
+      // 3. Highlight the lock indicator
+      if (petLockNotice) {
+        petLockNotice.className = "pet-type-notice locked";
+        if (petLockIcon) petLockIcon.textContent = "🔒";
+        if (petLockText) {
+          petLockText.innerHTML = `<strong>Locked to ${currentService.category}:</strong> "${currentService.shortName}" is exclusive to ${currentService.category}s.`;
+        }
+        if (petUnlockBtn) petUnlockBtn.style.display = "inline-block";
+      }
+    } else {
+      // UNIVERSAL PACKAGE: All pet types allowed and unlocked!
+      Array.from(petTypeSelect.options).forEach((opt) => {
+        opt.disabled = false;
+        opt.textContent = `${opt.value === "Dog" ? "🐶" : opt.value === "Cat" ? "🐱" : "🐰"} ${opt.value}`;
+      });
+
+      if (petLockNotice) {
+        petLockNotice.className = "pet-type-notice unlocked";
+        if (petLockIcon) petLockIcon.textContent = "✅";
+        if (petLockText) {
+          petLockText.textContent = `Unlocked: Available for all pets. You can freely switch between Dog, Cat, or Rabbit.`;
+        }
+        if (petUnlockBtn) petUnlockBtn.style.display = "none";
+      }
+    }
+  }
+
+  // Handle URL parameters (e.g. from services.html or homepage)
+  const params = new URLSearchParams(window.location.search);
+  const preselectedPkg = params.get("pkg");
+  const preselectedPet = params.get("pet");
+
+  let initialPet = "Dog";
+  if (preselectedPet && ["Dog", "Cat", "Rabbit"].includes(preselectedPet)) {
+    initialPet = preselectedPet;
+  } else if (preselectedPkg) {
+    const srvMatch = findServiceInCatalog(preselectedPkg);
+    if (srvMatch && srvMatch.category !== "All") {
+      initialPet = srvMatch.category;
+    }
+  }
+
+  petTypeSelect.value = initialPet;
+  populateServicesForPet(initialPet, preselectedPkg);
+
+  // Event Listener: When user changes Pet Type
+  petTypeSelect.addEventListener("change", () => {
+    const newPet = petTypeSelect.value;
+    const currentService = findServiceInCatalog(packageSelect.value);
+
+    // If current service is universal, keep it selected. Otherwise let it pick a valid service for the new pet.
+    const keepPkg = currentService && currentService.category === "All" ? currentService.name : null;
+    populateServicesForPet(newPet, keepPkg);
+    clearFieldError("petType");
+    clearFieldError("selectedPackage");
+  });
+
+  // Event Listener: When user changes Service from the dropdown
+  packageSelect.addEventListener("change", () => {
+    syncLockState();
+    clearFieldError("selectedPackage");
+    clearFieldError("petType");
+  });
+
+  // Event Listener: Unlock button to switch to universal package
+  if (petUnlockBtn) {
+    petUnlockBtn.addEventListener("click", () => {
+      // Re-enable all options first
+      Array.from(petTypeSelect.options).forEach((opt) => {
+        opt.disabled = false;
+        opt.textContent = `${opt.value === "Dog" ? "🐶" : opt.value === "Cat" ? "🐱" : "🐰"} ${opt.value}`;
+      });
+
+      // Switch to universal Gold Royal Spa package
+      populateServicesForPet(petTypeSelect.value, "Gold Royal Spa Package (RM 175)");
+      clearFieldError("petType");
+      clearFieldError("selectedPackage");
+    });
   }
 
   // Validation helpers
@@ -922,10 +1230,7 @@ function initBookingPage() {
   // Validation Rule 1: Malaysian Phone Number Validation
   function isValidMalaysianPhone(phoneStr) {
     if (!phoneStr) return false;
-    // Strip common separators: spaces, hyphens, parentheses
     const cleaned = phoneStr.replace(/[\s\-\(\)]/g, "");
-    // Malaysian mobile prefix: 010, 011, 012, 013, 014, 015, 016, 017, 018, 019
-    // Standard format: 01X-XXXXXXX (10-11 digits total) or +601XXXXXXXX
     const regex = /^(?:\+?60|0)1[0-46-9][0-9]{7,8}$/;
     return regex.test(cleaned);
   }
@@ -1001,6 +1306,19 @@ function initBookingPage() {
       clearFieldError("appointmentDate");
     }
 
+    // 5. Incompatible Selection Check
+    const petType = petTypeSelect.value;
+    const selectedPkg = packageSelect.value;
+    const serviceMatch = findServiceInCatalog(selectedPkg);
+    if (serviceMatch && serviceMatch.category !== "All" && serviceMatch.category !== petType) {
+      setFieldError(
+        "selectedPackage",
+        `Incompatible Selection: "${serviceMatch.name}" is exclusive to ${serviceMatch.category}s and cannot be booked for a ${petType}.`
+      );
+      isValid = false;
+      if (!firstInvalidField) firstInvalidField = packageSelect;
+    }
+
     if (!isValid) {
       if (firstInvalidField) {
         firstInvalidField.focus();
@@ -1008,9 +1326,6 @@ function initBookingPage() {
       return;
     }
 
-    // Collect validated fields
-    const petType = petTypeSelect.value;
-    const selectedPkg = packageSelect.value;
     const timeSlot = timeSlotSelect.value;
 
     // Generate unique reference ID
@@ -1034,7 +1349,12 @@ function initBookingPage() {
     });
 
     const petIcon = petType === "Dog" ? "🐶" : petType === "Cat" ? "🐱" : "🐰";
-    const zoneName = petType === "Dog" ? "Soundproof Hydro-Spa Pavilion" : petType === "Cat" ? "Pheromone Feline Suite" : "Quiet Exotic Mammal Zone";
+    const zoneName =
+      petType === "Dog"
+        ? "Soundproof Hydro-Spa Pavilion"
+        : petType === "Cat"
+        ? "Pheromone Feline Suite"
+        : "Quiet Exotic Mammal Zone";
 
     // Generate barcode lines
     const barcodeBars = Array.from({ length: 42 })
@@ -1099,33 +1419,31 @@ function initBookingPage() {
           <button type="button" class="btn btn-outline" id="printPassBtn" style="padding: 0.55rem 1.15rem; font-size: 0.9rem;">
             🖨️ Print / Save Booking Pass
           </button>
-          <button type="button" class="btn btn-primary" id="bookAnotherBtn" style="padding: 0.55rem 1.15rem; font-size: 0.9rem;">
-            ➕ Book Another Appointment
-          </button>
+          <a href="index.html" class="btn btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.9rem;">
+            Back to Home
+          </a>
         </div>
       </div>
     `;
 
+    // Smooth scroll down to receipt
     confirmationBox.scrollIntoView({ behavior: "smooth", block: "start" });
 
-    // Print button handler
+    // Hook up print button
     const printBtn = document.getElementById("printPassBtn");
     if (printBtn) {
-      printBtn.addEventListener("click", () => window.print());
-    }
-
-    // Book another button handler
-    const bookAnotherBtn = document.getElementById("bookAnotherBtn");
-    if (bookAnotherBtn) {
-      bookAnotherBtn.addEventListener("click", () => {
-        bookingForm.reset();
-        confirmationBox.style.display = "none";
-        if (dateInput) dateInput.value = todayStr;
-        bookingForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      printBtn.addEventListener("click", () => {
+        window.print();
       });
     }
+
+    // Reset fields for future entry, retaining today's date
+    bookingForm.reset();
+    if (dateInput) dateInput.value = appDate;
+    populateServicesForPet("Dog");
   });
 }
+
 
 // 6. Contact Us Page Logic (Support Form + Interactive Mock Map)
 function initContactPage() {
