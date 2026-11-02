@@ -50,9 +50,24 @@
 
   <main class="section">
     <div class="container" style="max-width: 820px;">
-      <!-- Requirement 5: Interactive Scheduling Form with all 7 required fields -->
+      <!-- Requirement 5: Interactive Scheduling Form with all 8 fields -->
       <div class="calc-panel">
         <h2 style="color: var(--primary-dark); margin-bottom: 1.25rem;">🐾 Appointment Scheduling Dashboard</h2>
+
+        <!-- Locked Custom Combo Calculation Banner (when coming from calculator) -->
+        <div id="bookingEstimateBanner" class="calc-estimate-banner" style="display: none;">
+          <div class="estimate-banner-header">
+            <div>
+              <span class="badge badge-gold">🧾 Calculator Estimate Locked</span>
+              <h3 style="margin: 0.35rem 0 0.15rem; color: var(--primary-dark); font-size: 1.18rem;">Custom Grooming Combo Calculation</h3>
+              <p id="estimateAddonsSummary" style="font-size: 0.88rem; color: var(--text-muted); margin: 0;"></p>
+            </div>
+            <div class="estimate-total-pill">
+              <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 700; display: block;">Tallied Estimated Total</span>
+              <span id="bookingEstimateDisplay" style="font-size: 1.45rem; font-weight: 800; color: var(--accent);">RM 0.00</span>
+            </div>
+          </div>
+        </div>
 
         <form id="bookingForm" novalidate>
           <div class="form-grid">
@@ -105,17 +120,37 @@
                 <!-- Populated dynamically via script.js based on Pet Type -->
               </select>
               <div id="serviceDetailsHint" style="font-size:0.84rem; color:var(--text-muted); margin-top:0.4rem; line-height:1.45;"></div>
+
+              <!-- Live Fee Tally Card -->
+              <div id="liveFeeCard" class="live-fee-card">
+                <span style="font-size: 0.88rem; font-weight: 600; color: var(--primary-dark);">Estimated Service Fee:</span>
+                <span id="liveFeeAmount" style="font-size: 1.18rem; font-weight: 800; color: var(--accent);">RM 175.00</span>
+              </div>
               <span class="field-error" id="selectedPackageError" role="alert"></span>
             </div>
 
-            <!-- 6. Appointment Date -->
+            <!-- 6. Preferred Certified Groomer -->
+            <div class="form-group full">
+              <label for="preferredGroomer">Preferred Certified Groomer *</label>
+              <select id="preferredGroomer" class="form-control" required>
+                <option value="Any Available Master Stylist">✨ Any Available Master Groomer (First Available Slot)</option>
+                <option value="Sofya Vance">✂️ Sofya Vance (Master Stylist &amp; Director — Canine / Asian Fusion Specialist)</option>
+                <option value="Christy Foo">🐱 Christy Foo (Senior Feline &amp; Rabbit Whisperer — Stress-Free Specialist)</option>
+                <option value="Angelina">🌿 Angelina (Derma-Spa &amp; Senior Pet Care Lead — Ozone &amp; Medicated Hydrotherapy)</option>
+                <option value="Benjamin Czes">🐕 Benjamin Czes (Double-Coat &amp; Creative Specialist — Husky/Deshedding &amp; Puppy)</option>
+              </select>
+              <div id="groomerSpecialtyNote" style="font-size: 0.83rem; color: var(--text-muted); margin-top: 0.35rem;"></div>
+              <span class="field-error" id="preferredGroomerError" role="alert"></span>
+            </div>
+
+            <!-- 7. Appointment Date -->
             <div class="form-group">
               <label for="appointmentDate">Appointment Date *</label>
               <input type="date" id="appointmentDate" class="form-control" required />
               <span class="field-error" id="appointmentDateError" role="alert"></span>
             </div>
 
-            <!-- 7. Time Slot -->
+            <!-- 8. Time Slot -->
             <div class="form-group">
               <label for="timeSlot">Preferred Time Slot *</label>
               <select id="timeSlot" class="form-control" required>

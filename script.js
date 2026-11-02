@@ -515,7 +515,7 @@ function initHomepage() {
           </div>
           <h3 class="card-title">${pkg.name}</h3>
           <p class="card-desc">${pkg.description}</p>
-          <a href="booking.html?pkg=${encodeURIComponent(pkg.name)}" class="btn btn-primary">Book Flagship Spa</a>
+          <a href="booking.html?pkg=${encodeURIComponent(pkg.name)}&pet=${encodeURIComponent(pkg.petType === 'Cat' ? 'Cat' : 'Dog')}" class="btn btn-primary">Book Flagship Spa</a>
         </div>
       </article>
     `
@@ -594,7 +594,7 @@ function initServicesPage() {
             </div>
             <h3 class="card-title">${srv.title}</h3>
             <p class="card-desc">${srv.description}</p>
-            <a href="booking.html?pkg=${encodeURIComponent(srv.title)}" class="btn btn-outline">Select Service</a>
+            <a href="booking.html?pkg=${encodeURIComponent(srv.title)}&pet=${encodeURIComponent(srv.category)}" class="btn btn-outline">Select Service</a>
           </div>
         </article>
       `;
@@ -745,9 +745,19 @@ function initPackagesAndCalculator() {
     totalDisplay.classList.add("text-bouncy");
 
     if (bookCalculatedBtn) {
+      const tierMap = { bronze: "Bronze Essential", silver: "Silver Deluxe", gold: "Gold Royal Spa" };
+      const basePkgName = tierMap[tierSelect.value] || tierName.split(" (")[0].replace(/^[^a-zA-Z0-9]+/, "").trim();
+      const addonsList = selectedAddons.map((a) => a.name);
+      if (coatHealthSurcharge > 0) {
+        addonsList.push(coatHealthLabel.split(" (")[0].replace(/^[^a-zA-Z0-9]+/, "").trim());
+      }
+      const addonsParam = addonsList.join(" + ");
+      const cleanSize = sizeLabel.split(" (")[0].replace(/^[^a-zA-Z0-9]+/, "").trim();
       bookCalculatedBtn.href = `booking.html?pkg=${encodeURIComponent(
-        `${tierName.split(" (")[0]} (Est. RM ${finalTotal.toFixed(2)})`
-      )}`;
+        basePkgName
+      )}&est=${encodeURIComponent(finalTotal.toFixed(2))}&size=${encodeURIComponent(
+        cleanSize
+      )}&count=${petCount}&addons=${encodeURIComponent(addonsParam)}`;
     }
   }
 
@@ -778,7 +788,13 @@ function initGroomersPage() {
         <h3 class="card-title">${g.name}</h3>
         <p style="font-weight:700; color:var(--accent); font-size:0.92rem; margin-bottom:0.5rem;">${g.role}</p>
         <p class="card-desc"><strong>Specialty:</strong> ${g.specialty}</p>
-        <button type="button" class="btn btn-outline" style="width:100%;">View Portfolio & Certificates</button>
+        <div class="groomer-card-actions">
+          <button type="button" class="btn btn-outline groomer-btn-bio">View Bio</button>
+          <a href="booking.html?groomer=${encodeURIComponent(g.name)}&pet=${encodeURIComponent(g.id === 'grm-2' ? 'Cat' : 'Dog')}" class="btn btn-primary groomer-btn-book" onclick="event.stopPropagation();">
+            <span>Book Stylist</span>
+            <span class="arrow-glyph">➔</span>
+          </a>
+        </div>
       </div>
     </article>
   `
@@ -815,7 +831,7 @@ function initGroomersPage() {
         </ul>
       </div>
       <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
-        <a href="booking.html?pkg=${encodeURIComponent("Session with " + g.name)}" class="btn btn-primary">Book with ${g.name.split(" ")[0]} ➔</a>
+        <a href="booking.html?groomer=${encodeURIComponent(g.name)}&pet=${encodeURIComponent(g.id === 'grm-2' ? 'Cat' : 'Dog')}" class="btn btn-primary">Book with ${g.name.split(" ")[0]} ➔</a>
       </div>
     `;
 
@@ -1006,14 +1022,15 @@ function findServiceInCatalog(query) {
         s.name.toLowerCase() === q ||
         s.shortName.toLowerCase() === q ||
         s.id.toLowerCase() === q ||
-        q.includes(s.shortName.toLowerCase()) ||
+        s.name.toLowerCase().includes(q) ||
+        q.includes(s.name.toLowerCase()) ||
         s.shortName.toLowerCase().includes(q) ||
-        q.includes(s.name.toLowerCase())
+        q.includes(s.shortName.toLowerCase())
     ) || null
   );
 }
 
-// 5. Booking Page Logic (Species-Exclusive Locking + Malaysian Phone Validation + Structured Receipt)
+// 5. Booking Page Logic (Species-Exclusive Locking + Calculator-to-Booking Linkage + Stylist Selection + Malaysian Phone Validation + Structured Receipt Pass)
 function initBookingPage() {
   const bookingForm = document.getElementById("bookingForm");
   const ownerNameInput = document.getElementById("ownerName");
@@ -1021,6 +1038,8 @@ function initBookingPage() {
   const petTypeSelect = document.getElementById("petType");
   const petNameInput = document.getElementById("petName");
   const packageSelect = document.getElementById("selectedPackage");
+  const groomerSelect = document.getElementById("preferredGroomer");
+  const groomerNote = document.getElementById("groomerSpecialtyNote");
   const dateInput = document.getElementById("appointmentDate");
   const timeSlotSelect = document.getElementById("timeSlot");
   const confirmationBox = document.getElementById("bookingConfirmationBox");
@@ -1030,8 +1049,22 @@ function initBookingPage() {
   const petUnlockBtn = document.getElementById("petUnlockBtn");
   const packageFilterTag = document.getElementById("packageFilterTag");
   const serviceDetailsHint = document.getElementById("serviceDetailsHint");
+  const bookingEstimateBanner = document.getElementById("bookingEstimateBanner");
+  const bookingEstimateDisplay = document.getElementById("bookingEstimateDisplay");
+  const estimateAddonsSummary = document.getElementById("estimateAddonsSummary");
+  const liveFeeAmount = document.getElementById("liveFeeAmount");
 
   if (!bookingForm || !petTypeSelect || !packageSelect) return;
+
+  // Read URL parameters
+  const params = new URLSearchParams(window.location.search);
+  const preselectedPkg = params.get("pkg");
+  const preselectedPet = params.get("pet");
+  const preselectedGroomer = params.get("groomer");
+  const customEstimate = params.get("est");
+  const customAddons = params.get("addons");
+  const customSize = params.get("size");
+  const customCount = params.get("count");
 
   // Set minimum date to today (YYYY-MM-DD)
   const now = new Date();
@@ -1047,7 +1080,57 @@ function initBookingPage() {
     }
   }
 
-  // Populate services dropdown according to the current pet type
+  // Handle Groomer notes and pre-selection
+  function updateGroomerNote() {
+    if (!groomerSelect || !groomerNote) return;
+    const val = groomerSelect.value;
+    const groomerObj = groomersData.find((g) => g.name === val || val.includes(g.name));
+    if (groomerObj) {
+      groomerNote.innerHTML = `🌟 <strong>${groomerObj.name}</strong> (${groomerObj.role}) — Specialty: <em>${groomerObj.specialty}</em>`;
+    } else {
+      groomerNote.textContent = "✨ First available certified master stylist on duty will be assigned to pamper your pet.";
+    }
+  }
+
+  if (groomerSelect) {
+    if (preselectedGroomer) {
+      for (let i = 0; i < groomerSelect.options.length; i++) {
+        if (
+          groomerSelect.options[i].value.toLowerCase().includes(preselectedGroomer.toLowerCase()) ||
+          preselectedGroomer.toLowerCase().includes(groomerSelect.options[i].value.toLowerCase())
+        ) {
+          groomerSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
+    updateGroomerNote();
+    groomerSelect.addEventListener("change", updateGroomerNote);
+  }
+
+  // Handle Custom Calculator Estimate Banner
+  let hasLockedEstimate = false;
+  let lockedEstimateVal = null;
+  if (customEstimate && !isNaN(parseFloat(customEstimate))) {
+    hasLockedEstimate = true;
+    lockedEstimateVal = parseFloat(customEstimate).toFixed(2);
+    if (bookingEstimateBanner) {
+      bookingEstimateBanner.style.display = "block";
+      if (bookingEstimateDisplay) {
+        bookingEstimateDisplay.textContent = `RM ${lockedEstimateVal}`;
+      }
+      if (estimateAddonsSummary) {
+        const parts = [];
+        if (preselectedPkg) parts.push(`Base Tier: <strong>${preselectedPkg}</strong>`);
+        if (customSize) parts.push(`Size: ${customSize}`);
+        if (customAddons) parts.push(`Spa Add-ons: <strong>${customAddons}</strong>`);
+        if (customCount && parseInt(customCount, 10) > 1) parts.push(`${customCount} Pets (10% OFF Combo Applied)`);
+        estimateAddonsSummary.innerHTML = parts.join(" • ");
+      }
+    }
+  }
+
+  // Populate services dropdown according to current pet type
   function populateServicesForPet(currentPet, desiredServiceName = null) {
     const exclusiveServices = bookingCatalog.filter((s) => s.category === currentPet);
     const universalServices = bookingCatalog.filter((s) => s.category === "All");
@@ -1096,7 +1179,7 @@ function initBookingPage() {
     syncLockState();
   }
 
-  // Synchronize lock status between selected service and pet type
+  // Synchronize lock status and live fee between selected service and pet type
   function syncLockState() {
     const selectedVal = packageSelect.value;
     const currentService = findServiceInCatalog(selectedVal);
@@ -1112,14 +1195,23 @@ function initBookingPage() {
       serviceDetailsHint.innerHTML = `<strong>${currentService.icon} ${currentService.shortName}:</strong> ${currentService.desc} <span style="display:inline-block; margin-top:0.25rem; font-weight:700; color:var(--primary-dark); font-size:0.8rem; background:rgba(31,95,91,0.08); padding:0.15rem 0.45rem; border-radius:6px;">${catLabel}</span>`;
     }
 
+    // Update Live Fee Card to tally with calculator or standard price
+    if (liveFeeAmount) {
+      if (hasLockedEstimate) {
+        liveFeeAmount.textContent = `RM ${lockedEstimateVal} (Custom Combo Locked)`;
+      } else {
+        liveFeeAmount.textContent = `RM ${currentService.price.toFixed(2)}`;
+      }
+    }
+
     // LOCKING RULES:
     if (currentService.category !== "All") {
-      // 1. Force pet type to match the exclusive service
+      // 1. Force pet type to match exclusive service
       if (petTypeSelect.value !== currentService.category) {
         petTypeSelect.value = currentService.category;
       }
 
-      // 2. Disable incompatible pet options so pet type cannot be changed while this exclusive service is chosen
+      // 2. Disable incompatible pet options
       Array.from(petTypeSelect.options).forEach((opt) => {
         if (opt.value !== currentService.category) {
           opt.disabled = true;
@@ -1130,7 +1222,7 @@ function initBookingPage() {
         }
       });
 
-      // 3. Highlight the lock indicator
+      // 3. Highlight lock indicator
       if (petLockNotice) {
         petLockNotice.className = "pet-type-notice locked";
         if (petLockIcon) petLockIcon.textContent = "🔒";
@@ -1140,7 +1232,7 @@ function initBookingPage() {
         if (petUnlockBtn) petUnlockBtn.style.display = "inline-block";
       }
     } else {
-      // UNIVERSAL PACKAGE: All pet types allowed and unlocked!
+      // UNIVERSAL PACKAGE: All pet types allowed
       Array.from(petTypeSelect.options).forEach((opt) => {
         opt.disabled = false;
         opt.textContent = `${opt.value === "Dog" ? "🐶" : opt.value === "Cat" ? "🐱" : "🐰"} ${opt.value}`;
@@ -1150,18 +1242,14 @@ function initBookingPage() {
         petLockNotice.className = "pet-type-notice unlocked";
         if (petLockIcon) petLockIcon.textContent = "✅";
         if (petLockText) {
-          petLockText.textContent = `Unlocked: Available for all pets. You can freely switch between Dog, Cat, or Rabbit.`;
+          petLockText.textContent = "Unlocked: Available for all pets. You can freely switch between Dog, Cat, or Rabbit.";
         }
         if (petUnlockBtn) petUnlockBtn.style.display = "none";
       }
     }
   }
 
-  // Handle URL parameters (e.g. from services.html or homepage)
-  const params = new URLSearchParams(window.location.search);
-  const preselectedPkg = params.get("pkg");
-  const preselectedPet = params.get("pet");
-
+  // Initial Pet Type deduction
   let initialPet = "Dog";
   if (preselectedPet && ["Dog", "Cat", "Rabbit"].includes(preselectedPet)) {
     initialPet = preselectedPet;
@@ -1169,6 +1257,13 @@ function initBookingPage() {
     const srvMatch = findServiceInCatalog(preselectedPkg);
     if (srvMatch && srvMatch.category !== "All") {
       initialPet = srvMatch.category;
+    }
+  } else if (preselectedGroomer) {
+    const gMatch = groomersData.find(
+      (g) => g.name.toLowerCase().includes(preselectedGroomer.toLowerCase()) || preselectedGroomer.toLowerCase().includes(g.name.toLowerCase())
+    );
+    if (gMatch && gMatch.id === "grm-2") {
+      initialPet = "Cat";
     }
   }
 
@@ -1179,16 +1274,19 @@ function initBookingPage() {
   petTypeSelect.addEventListener("change", () => {
     const newPet = petTypeSelect.value;
     const currentService = findServiceInCatalog(packageSelect.value);
-
-    // If current service is universal, keep it selected. Otherwise let it pick a valid service for the new pet.
     const keepPkg = currentService && currentService.category === "All" ? currentService.name : null;
     populateServicesForPet(newPet, keepPkg);
     clearFieldError("petType");
     clearFieldError("selectedPackage");
   });
 
-  // Event Listener: When user changes Service from the dropdown
+  // Event Listener: When user changes Service from dropdown
   packageSelect.addEventListener("change", () => {
+    // If user manually switches away from the locked combo, release the lock banner
+    if (hasLockedEstimate && preselectedPkg && !packageSelect.value.toLowerCase().includes(preselectedPkg.toLowerCase())) {
+      hasLockedEstimate = false;
+      if (bookingEstimateBanner) bookingEstimateBanner.style.display = "none";
+    }
     syncLockState();
     clearFieldError("selectedPackage");
     clearFieldError("petType");
@@ -1197,13 +1295,10 @@ function initBookingPage() {
   // Event Listener: Unlock button to switch to universal package
   if (petUnlockBtn) {
     petUnlockBtn.addEventListener("click", () => {
-      // Re-enable all options first
       Array.from(petTypeSelect.options).forEach((opt) => {
         opt.disabled = false;
         opt.textContent = `${opt.value === "Dog" ? "🐶" : opt.value === "Cat" ? "🐱" : "🐰"} ${opt.value}`;
       });
-
-      // Switch to universal Gold Royal Spa package
       populateServicesForPet(petTypeSelect.value, "Gold Royal Spa Package (RM 175)");
       clearFieldError("petType");
       clearFieldError("selectedPackage");
@@ -1232,7 +1327,7 @@ function initBookingPage() {
   }
 
   // Real-time error clearing when user types or changes an input
-  [ownerNameInput, contactPhoneInput, petTypeSelect, petNameInput, packageSelect, dateInput, timeSlotSelect].forEach(
+  [ownerNameInput, contactPhoneInput, petTypeSelect, petNameInput, packageSelect, groomerSelect, dateInput, timeSlotSelect].forEach(
     (el) => {
       if (!el) return;
       el.addEventListener("input", () => clearFieldError(el.id));
@@ -1339,6 +1434,7 @@ function initBookingPage() {
       return;
     }
 
+    const preferredGroomer = groomerSelect ? groomerSelect.value : "Any Available Master Stylist";
     const timeSlot = timeSlotSelect.value;
 
     // Generate unique reference ID
@@ -1369,18 +1465,32 @@ function initBookingPage() {
         ? "Pheromone Feline Suite"
         : "Quiet Exotic Mammal Zone";
 
+    // Tally exact confirmed amount
+    const confirmedFee = hasLockedEstimate
+      ? `RM ${lockedEstimateVal}`
+      : `RM ${serviceMatch ? serviceMatch.price.toFixed(2) : "0.00"}`;
+
+    const feeSubtext = hasLockedEstimate
+      ? "Tallied with Custom Combo Calculator"
+      : "Standard Published Rate (Pay at Salon)";
+
+    // Stylist title / specialty info
+    const groomerMatch = groomersData.find((g) => g.name === preferredGroomer || preferredGroomer.includes(g.name));
+    const stylistTitle = groomerMatch ? `${groomerMatch.name} (${groomerMatch.role})` : preferredGroomer;
+    const stylistSpecialty = groomerMatch ? `Specialty: ${groomerMatch.specialty}` : "First available master stylist assigned on duty";
+
     // Generate barcode lines
     const barcodeBars = Array.from({ length: 42 })
       .map((_, i) => `<div class="barcode-bar" style="width: ${(i % 3 === 0 ? 3 : i % 2 === 0 ? 2 : 1.5)}px;"></div>`)
       .join("");
 
-    // Inject gorgeous structured booking receipt
+    // Inject gorgeous structured booking receipt pass
     confirmationBox.style.display = "block";
     confirmationBox.innerHTML = `
       <div class="booking-receipt-card" role="region" aria-label="Official Booking Pass">
         <div class="receipt-header">
           <div class="receipt-header-left">
-            <img src="assets/images/paws-whiskers-logo.png" alt="Logo" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover;" />
+            <img src="assets/images/paws-whiskers-logo.png" alt="Logo" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent); object-fit: contain; background: transparent;" />
             <div>
               <h3 style="margin: 0; color: var(--primary-dark); font-size: 1.25rem;">Paws &amp; Whiskers Pet Spa</h3>
               <span style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.06em;">Official Appointment Confirmation Pass</span>
@@ -1402,7 +1512,7 @@ function initBookingPage() {
           <div class="receipt-item">
             <div class="receipt-item-label">Pet Guest Details</div>
             <div class="receipt-item-value">${petIcon} ${petName} (${petType})</div>
-            <small style="color: var(--text-muted);">Assigned to: ${zoneName}</small>
+            <small style="color: var(--text-muted);">Assigned Zone: ${zoneName}</small>
           </div>
 
           <div class="receipt-item">
@@ -1412,15 +1522,25 @@ function initBookingPage() {
           </div>
 
           <div class="receipt-item">
-            <div class="receipt-item-label">Package / Treatment</div>
-            <div class="receipt-item-value" style="font-size: 0.92rem;">${selectedPkg}</div>
-            <small style="color: var(--accent); font-weight: 700;">100% Cage-Free Guarantee</small>
+            <div class="receipt-item-label">Certified Master Stylist</div>
+            <div class="receipt-item-value" style="font-size: 0.95rem;">✂️ ${stylistTitle}</div>
+            <small style="color: var(--text-muted);">${stylistSpecialty}</small>
+          </div>
+
+          <div class="receipt-item" style="grid-column: 1 / -1;">
+            <div class="receipt-item-label">Package / Treatment &amp; Estimated Total</div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.2rem;">
+              <div class="receipt-item-value" style="font-size: 1.05rem;">${selectedPkg}</div>
+              <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent);">${confirmedFee}</div>
+            </div>
+            ${hasLockedEstimate && customAddons ? `<div style="font-size: 0.84rem; color: var(--primary-dark); margin-top: 0.25rem;"><strong>Custom Add-ons Included:</strong> ✨ ${customAddons}</div>` : ""}
+            <small style="color: var(--text-muted);">${feeSubtext} • 100% Cage-Free Guarantee</small>
           </div>
         </div>
 
         <div class="receipt-notice">
           <strong>📍 Arrival Instructions:</strong> No. 28, Jalan Telawi 3, Bangsar Baru, 59100 Kuala Lumpur.<br />
-          Complimentary 15-minute VIP drop-off parking bays are reserved directly in front of the salon. A reminder SMS has been queued for <strong>${rawPhone}</strong>.
+          Complimentary 15-minute VIP drop-off parking bays are reserved directly in front of the salon. A confirmation SMS has been queued for <strong>${rawPhone}</strong>.
         </div>
 
         <div class="receipt-barcode-box">
@@ -1454,9 +1574,10 @@ function initBookingPage() {
     bookingForm.reset();
     if (dateInput) dateInput.value = appDate;
     populateServicesForPet("Dog");
+    if (groomerSelect) groomerSelect.selectedIndex = 0;
+    updateGroomerNote();
   });
 }
-
 
 // 6. Contact Us Page Logic (Support Form + Interactive Mock Map)
 function initContactPage() {
